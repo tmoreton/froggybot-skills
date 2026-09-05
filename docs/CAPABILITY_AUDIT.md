@@ -21,7 +21,7 @@ The four group workflows are the product's core. Deep Research and Data Workspac
 
 ## Tool presentation
 
-User-facing tools are Web Reader, Web Search, Shared Lists, Files & Data, Interactive Browser, and YouTube. Calculator, World Clock, and Focused Delegate remain enabled as internal dependencies but are not shown as choices. X remains disabled until its API credits are restored.
+User-facing tools are Web Reader, Web Search, Shared Lists, Files & Data, Interactive Browser, YouTube, and X. Calculator, World Clock, and Focused Delegate remain enabled as internal dependencies but are not shown as choices. X is read-only and limited to recent public-post research.
 
 ## Connection model
 

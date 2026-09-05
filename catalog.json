@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v8",
+  "release": "skills-v9",
   "tools": [
     {
       "id": "web",
@@ -71,8 +71,7 @@
       "credential": "FrogBotXApi",
       "schemaPath": "tools/x/openapi.yaml",
       "runtime": { "kind": "gateway", "operations": ["x_search_recent"] },
-      "enabled": false,
-      "listed": false
+      "enabled": true
     },
     {
       "id": "youtube_search",
