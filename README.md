@@ -67,7 +67,7 @@ This repository owns capability definitions: names, descriptions, skill instruct
 - the allowlist that prevents public catalog entries from activating arbitrary bundled code; and
 - AWS credentials, permissions, and deployed gateway resources.
 
-Those pieces cannot be downloaded as community content because they execute with trusted server permissions. The app contains no fallback copy of this public catalog.
+Those pieces cannot be downloaded as community content because they execute with trusted server permissions. The app contains no fallback copy of this public catalog. Write-capable private connections require approval for each direct-chat turn and cannot run in schedules or group rounds.
 
 The X and YouTube targets are the one deployment exception to the main AgentCore project file. AgentCore project schema v1 cannot express an API key's header/query location or prefix, so `infrastructure/gateway-targets.yaml` owns those two targets declaratively next to their canonical schemas. Remove that template when the project schema supports these fields; do not copy the schemas back into the app repository.
 
