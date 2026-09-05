@@ -32,6 +32,7 @@ class SiteTests(unittest.TestCase):
         script = (SITE / "scripts/library.js").read_text()
         self.assertIn("fetch('/catalog.json'", script)
         self.assertIn("tool.enabled !== false", script)
+        self.assertIn("tool.listed !== false", script)
         self.assertIn("requiredToolIds", script)
 
     def test_catalog_points_at_current_repository(self) -> None:

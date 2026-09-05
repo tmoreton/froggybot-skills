@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v7",
+  "release": "skills-v8",
   "tools": [
     {
       "id": "web",
@@ -36,12 +36,13 @@
       "description": "Do exact arithmetic safely.",
       "provider": "frogbot",
       "risk": "read",
-      "category": "Data",
+      "category": "Internal",
       "author": "FroggyBot",
       "tags": ["math", "calculations"],
       "actions": ["Calculate exact results"],
       "runtime": { "kind": "local", "name": "calculator" },
-      "enabled": true
+      "enabled": true,
+      "listed": false
     },
     {
       "id": "current_time",
@@ -49,12 +50,13 @@
       "description": "Check the current time in any timezone.",
       "provider": "frogbot",
       "risk": "read",
-      "category": "Utilities",
+      "category": "Internal",
       "author": "FroggyBot",
       "tags": ["time", "timezones"],
       "actions": ["Check local time", "Compare timezones"],
       "runtime": { "kind": "local", "name": "current_time" },
-      "enabled": true
+      "enabled": true,
+      "listed": false
     },
     {
       "id": "x_search",
@@ -69,11 +71,12 @@
       "credential": "FrogBotXApi",
       "schemaPath": "tools/x/openapi.yaml",
       "runtime": { "kind": "gateway", "operations": ["x_search_recent"] },
-      "enabled": false
+      "enabled": false,
+      "listed": false
     },
     {
       "id": "youtube_search",
-      "name": "YouTube research",
+      "name": "YouTube",
       "description": "Find public videos and inspect their metadata and comments.",
       "provider": "agentcore-gateway",
       "risk": "read",
@@ -91,11 +94,11 @@
     },
     {
       "id": "task_list",
-      "name": "Task tracker",
+      "name": "Shared lists",
       "description": "Keep a live checklist during longer, multi-step work.",
       "provider": "stan",
       "risk": "sandbox",
-      "category": "Productivity",
+      "category": "Group planning",
       "author": "FroggyBot",
       "tags": ["tasks", "checklists"],
       "featured": true,
@@ -109,31 +112,32 @@
       "description": "Hand a focused subtask to a fresh agent and bring back its conclusion.",
       "provider": "stan",
       "risk": "sandbox",
-      "category": "Productivity",
+      "category": "Internal",
       "author": "FroggyBot",
       "tags": ["delegation", "parallel work"],
       "actions": ["Delegate a focused task", "Combine findings"],
       "runtime": { "kind": "stan_subagent", "name": "generalist" },
-      "enabled": true
+      "enabled": true,
+      "listed": false
     },
     {
       "id": "code_interpreter",
-      "name": "Code interpreter",
-      "description": "Run Python, JavaScript, or TypeScript in an isolated AgentCore sandbox.",
+      "name": "Files & data",
+      "description": "Analyze data and create spreadsheets, charts, documents, and PDFs in an isolated workspace.",
       "provider": "agentcore",
       "risk": "sandbox",
-      "category": "Data",
+      "category": "Outputs",
       "author": "FroggyBot",
-      "tags": ["code", "analysis"],
+      "tags": ["files", "data", "pdf"],
       "featured": true,
-      "actions": ["Analyze data", "Run calculations", "Create charts"],
+      "actions": ["Analyze data", "Create files", "Build charts"],
       "runtime": { "kind": "agentcore", "name": "code_interpreter" },
       "enabled": true
     },
     {
       "id": "browser",
       "name": "Interactive browser",
-      "description": "Open websites, navigate pages, interact with controls, and extract visible information.",
+      "description": "Navigate websites and interact with page controls after approval.",
       "provider": "agentcore",
       "risk": "interactive",
       "category": "Web",
@@ -147,62 +151,52 @@
   ],
   "skills": [
     {
-      "id": "planner",
-      "version": 1,
-      "name": "Planner",
-      "description": "Turn goals into practical next steps.",
-      "category": "Planning",
+      "id": "trip-planner",
+      "version": 2,
+      "name": "Group Trip Planner",
+      "description": "Turn everyone’s dates, preferences, and budget into a practical shared trip plan.",
+      "category": "Groups",
       "author": "FroggyBot",
-      "tags": ["plans", "next steps"],
+      "tags": ["travel", "itinerary", "budget", "groups"],
       "featured": true,
-      "path": "skills/planner/SKILL.md",
-      "requiredToolIds": []
+      "path": "skills/trip-planner/SKILL.md",
+      "requiredToolIds": ["web", "web_search", "calculator", "task_list"]
     },
     {
-      "id": "researcher",
-      "version": 1,
-      "name": "Researcher",
-      "description": "Investigate questions and synthesize evidence.",
-      "category": "Research",
+      "id": "event-planner",
+      "version": 2,
+      "name": "Event Planner",
+      "description": "Build a shared event plan with decisions, owners, timing, costs, and a live checklist.",
+      "category": "Groups",
       "author": "FroggyBot",
-      "tags": ["evidence", "sources"],
+      "tags": ["events", "schedule", "checklist", "budget"],
       "featured": true,
-      "path": "skills/researcher/SKILL.md",
-      "requiredToolIds": ["web", "web_search"]
+      "path": "skills/event-planner/SKILL.md",
+      "requiredToolIds": ["web_search", "calculator", "task_list"]
     },
     {
-      "id": "writer",
-      "version": 1,
-      "name": "Writer",
-      "description": "Draft polished, audience-aware copy.",
-      "category": "Writing",
+      "id": "group-decision",
+      "version": 2,
+      "name": "Group Decision Helper",
+      "description": "Gather preferences, compare workable options, and help a group reach a clear decision.",
+      "category": "Groups",
       "author": "FroggyBot",
-      "tags": ["drafting", "copy"],
+      "tags": ["decisions", "preferences", "comparison", "groups"],
       "featured": true,
-      "path": "skills/writer/SKILL.md",
-      "requiredToolIds": []
+      "path": "skills/group-decision/SKILL.md",
+      "requiredToolIds": ["calculator"]
     },
     {
-      "id": "x-research",
-      "version": 1,
-      "name": "X / Twitter Research",
-      "description": "Find recent posts and turn social conversation into sourced insight.",
-      "category": "Research",
+      "id": "shared-budget",
+      "version": 2,
+      "name": "Shared Budget",
+      "description": "Create a transparent group budget, compare scenarios, and split costs fairly.",
+      "category": "Groups",
       "author": "FroggyBot",
-      "tags": ["social", "trends"],
-      "path": "skills/x-research/SKILL.md",
-      "requiredToolIds": ["x_search"]
-    },
-    {
-      "id": "youtube-research",
-      "version": 1,
-      "name": "YouTube Research",
-      "description": "Find useful videos and compare their public details and discussion.",
-      "category": "Research",
-      "author": "FroggyBot",
-      "tags": ["video", "comments"],
-      "path": "skills/youtube-research/SKILL.md",
-      "requiredToolIds": ["youtube_search"]
+      "tags": ["budget", "costs", "splits", "spreadsheet"],
+      "featured": true,
+      "path": "skills/shared-budget/SKILL.md",
+      "requiredToolIds": ["calculator", "code_interpreter"]
     },
     {
       "id": "deep-research",
@@ -217,163 +211,16 @@
       "requiredToolIds": ["web", "web_search", "task_list", "delegate"]
     },
     {
-      "id": "analyst",
-      "version": 1,
-      "name": "Analyst",
-      "description": "Compare options, test assumptions, and turn evidence into a recommendation.",
-      "category": "Analysis",
-      "author": "FroggyBot",
-      "tags": ["decisions", "comparison"],
-      "path": "skills/analyst/SKILL.md",
-      "requiredToolIds": ["calculator"]
-    },
-    {
       "id": "data-analyst",
       "version": 1,
-      "name": "Data Analyst",
-      "description": "Inspect data, calculate results, and verify conclusions with executable code.",
+      "name": "Data Workspace",
+      "description": "Inspect data, calculate results, verify conclusions, and create useful output files.",
       "category": "Analysis",
       "author": "FroggyBot",
-      "tags": ["data", "code"],
+      "tags": ["data", "files", "analysis"],
       "featured": true,
       "path": "skills/data-analyst/SKILL.md",
       "requiredToolIds": ["calculator", "code_interpreter"]
-    },
-    {
-      "id": "editor",
-      "version": 1,
-      "name": "Editor",
-      "description": "Improve clarity, structure, and tone while preserving the author's meaning.",
-      "category": "Writing",
-      "author": "FroggyBot",
-      "tags": ["editing", "clarity"],
-      "path": "skills/editor/SKILL.md",
-      "requiredToolIds": []
-    },
-    {
-      "id": "brainstormer",
-      "version": 1,
-      "name": "Brainstormer",
-      "description": "Generate distinct ideas, pressure-test them, and identify the strongest directions.",
-      "category": "Creativity",
-      "author": "FroggyBot",
-      "tags": ["ideas", "brainstorming"],
-      "path": "skills/brainstormer/SKILL.md",
-      "requiredToolIds": []
-    },
-    {
-      "id": "teacher",
-      "version": 1,
-      "name": "Teacher",
-      "description": "Explain difficult subjects at the learner's level and check understanding.",
-      "category": "Learning",
-      "author": "FroggyBot",
-      "tags": ["teaching", "explanations"],
-      "path": "skills/teacher/SKILL.md",
-      "requiredToolIds": []
-    },
-    {
-      "id": "fact-checker",
-      "version": 1,
-      "name": "Fact Checker",
-      "description": "Check concrete claims against reliable sources and explain the verdict.",
-      "category": "Research",
-      "author": "FroggyBot",
-      "tags": ["verification", "sources"],
-      "path": "skills/fact-checker/SKILL.md",
-      "requiredToolIds": ["web", "web_search"]
-    },
-    {
-      "id": "meeting-prep",
-      "version": 1,
-      "name": "Meeting Prep",
-      "description": "Turn a meeting goal and attendee context into a focused briefing.",
-      "category": "Productivity",
-      "author": "FroggyBot",
-      "tags": ["meetings", "briefings"],
-      "path": "skills/meeting-prep/SKILL.md",
-      "requiredToolIds": ["web_search"]
-    },
-    {
-      "id": "product-manager",
-      "version": 1,
-      "name": "Product Manager",
-      "description": "Shape product ideas into user problems, decisions, and testable requirements.",
-      "category": "Product",
-      "author": "FroggyBot",
-      "tags": ["product", "requirements"],
-      "path": "skills/product-manager/SKILL.md",
-      "requiredToolIds": []
-    },
-    {
-      "id": "project-manager",
-      "version": 1,
-      "name": "Project Manager",
-      "description": "Organize an outcome into owners, milestones, risks, and a maintained action list.",
-      "category": "Planning",
-      "author": "FroggyBot",
-      "tags": ["projects", "milestones"],
-      "path": "skills/project-manager/SKILL.md",
-      "requiredToolIds": ["task_list"]
-    },
-    {
-      "id": "trip-planner",
-      "version": 1,
-      "name": "Group Trip Planner",
-      "description": "Turn everyone’s dates, preferences, and budget into a practical shared trip plan.",
-      "category": "Groups",
-      "author": "FroggyBot",
-      "tags": ["travel", "itinerary", "budget", "groups"],
-      "featured": true,
-      "path": "skills/trip-planner/SKILL.md",
-      "requiredToolIds": ["web", "web_search", "calculator", "task_list"]
-    },
-    {
-      "id": "group-decision",
-      "version": 1,
-      "name": "Group Decision Helper",
-      "description": "Gather preferences, compare workable options, and help a group reach a clear decision.",
-      "category": "Groups",
-      "author": "FroggyBot",
-      "tags": ["decisions", "preferences", "comparison", "groups"],
-      "featured": true,
-      "path": "skills/group-decision/SKILL.md",
-      "requiredToolIds": ["calculator"]
-    },
-    {
-      "id": "event-planner",
-      "version": 1,
-      "name": "Event Planner",
-      "description": "Build a shared event plan with decisions, owners, timing, costs, and a live checklist.",
-      "category": "Groups",
-      "author": "FroggyBot",
-      "tags": ["events", "schedule", "checklist", "budget"],
-      "featured": true,
-      "path": "skills/event-planner/SKILL.md",
-      "requiredToolIds": ["web_search", "calculator", "task_list"]
-    },
-    {
-      "id": "shared-budget",
-      "version": 1,
-      "name": "Shared Budget",
-      "description": "Create a transparent group budget, compare scenarios, and split costs fairly.",
-      "category": "Groups",
-      "author": "FroggyBot",
-      "tags": ["budget", "costs", "splits", "spreadsheet"],
-      "featured": true,
-      "path": "skills/shared-budget/SKILL.md",
-      "requiredToolIds": ["calculator", "code_interpreter"]
-    },
-    {
-      "id": "summarizer",
-      "version": 1,
-      "name": "Summarizer",
-      "description": "Compress long material into an accurate summary tailored to the reader.",
-      "category": "Writing",
-      "author": "FroggyBot",
-      "tags": ["summaries", "documents"],
-      "path": "skills/summarizer/SKILL.md",
-      "requiredToolIds": []
     }
   ]
 }

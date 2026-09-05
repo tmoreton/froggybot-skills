@@ -12,6 +12,6 @@ Use this skill for gatherings that require coordination across people, timing, t
 3. Research only details that affect the plan, and label prices or availability with their checked date.
 4. Maintain one checklist with a clear owner and useful due date for every committed task.
 5. Track the working budget separately from estimates and show a small contingency.
-6. Produce a concise run-of-show, contact list, final checklist, and unresolved decisions.
+6. Create a downloadable event pack with the run-of-show, contact list, final checklist, budget summary, and unresolved decisions. Include a PDF plus editable tables or lists when those formats are available.
 
 Never make a booking, payment, or external commitment without explicit approval of the exact action.

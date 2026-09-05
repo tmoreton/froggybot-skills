@@ -53,6 +53,8 @@ def validate_public_metadata(item: dict, *, actions: bool = False) -> None:
             fail(f"{item_id} must include 1 to 8 short actions")
     if "featured" in item and not isinstance(item["featured"], bool):
         fail(f"{item_id} featured must be true or false")
+    if "listed" in item and not isinstance(item["listed"], bool):
+        fail(f"{item_id} listed must be true or false")
 
 
 def main() -> int:

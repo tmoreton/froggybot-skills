@@ -5,10 +5,12 @@ FroggyBot Skills accepts small, reviewable additions that help a person or group
 ## Choose the right contribution
 
 - **Skill:** readable instructions that shape how a FroggyBot approaches work.
-- **Tool request:** a proposal for reading from or acting in another service.
+- **Tool or connector:** a public definition for reading from or acting in another service.
 - **Website or documentation:** a focused improvement to `site/`, `README.md`, or `docs/`.
 
-Do not put executable integrations inside a skill. Tool execution, credentials, and permissions belong in FroggyBot’s reviewed server-side runtime.
+Do not put executable integrations inside a skill. Remote MCP servers stay hosted outside this repository, and credentials belong to the user who connects them.
+
+Private additions do not need review. Add a private skill or HTTPS MCP server directly in the FroggyBot app. Submit a pull request only when you want it listed for everyone.
 
 ## Add a skill
 
@@ -62,7 +64,7 @@ Preserve its ID. If instructions change behavior, increment its integer `version
 
 ## Propose a tool
 
-Open the tool request before writing an OpenAPI definition. Include:
+Open a focused pull request, or use the tool request first when you want design feedback. Include:
 
 - the user outcome and exact actions;
 - what information is read, stored, created, or changed;
@@ -71,8 +73,7 @@ Open the tool request before writing an OpenAPI definition. Include:
 - rate limits, cost, and failure behavior; and
 - the smallest permissions that support the outcome.
 
-Tool proposals are listed only after their server-side binding has been security-reviewed, deployed, and tested. Community pull requests never add secrets.
-Accepted OpenAPI schemas live under `tools/<provider>/openapi.yaml`, and their catalog entry names that file with `schemaPath`. The site publishes these schemas for review; AWS deploys an immutable release copy from this repository.
+Community pull requests never add secrets or hosted executable code. Public built-ins maintained by FroggyBot use reviewed OpenAPI schemas under `tools/<provider>/openapi.yaml`. Today, a community MCP server is connected privately by each user through the app. A public connection-recipe format can be added later without moving its server or credentials into this repository.
 
 ## Run the checks
 
@@ -92,4 +93,4 @@ Then check the homepage, library search and filters, mobile layout, contribution
 
 ## Review checklist
 
-Reviewers check that the contribution is useful, distinct, concise, safe, least-privilege, and understandable without private context. Broad catch-all skills, duplicated behavior, hidden instructions, and tools without a deployed binding are not accepted into the public catalog.
+Reviewers check that a public contribution is useful, distinct, concise, safe, least-privilege, and understandable without private context. Review determines public discoverability; it does not prevent users from installing the same capability privately.

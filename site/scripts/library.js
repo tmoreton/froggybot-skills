@@ -21,10 +21,10 @@ const riskLabel = (risk) => ({
 }[risk] || 'Access reviewed before use');
 
 function visibleCatalog(catalog) {
-  const tools = catalog.tools.filter((tool) => tool.enabled !== false);
-  const toolIds = new Set(tools.map((tool) => tool.id));
+  const enabledTools = catalog.tools.filter((tool) => tool.enabled !== false);
+  const toolIds = new Set(enabledTools.map((tool) => tool.id));
   return {
-    tools,
+    tools: enabledTools.filter((tool) => tool.listed !== false),
     skills: catalog.skills.filter((skill) => (skill.requiredToolIds || []).every((id) => toolIds.has(id))),
   };
 }
