@@ -16,7 +16,7 @@ Private additions do not need review. Add a private skill or HTTPS MCP server di
 
 1. Search `catalog.json`, open pull requests, and the [live library](https://froggybot.com/library/) for overlap.
 2. Copy the closest existing skill folder and rename it with a lowercase, hyphenated ID.
-3. Keep the package instruction-only: one `SKILL.md` plus optional `.md`, `.txt`, or `.json` references.
+3. Keep the package instruction-only: one `SKILL.md`, one `evals.json`, and optional `.md`, `.txt`, or `.json` references.
 4. Write a description that states the outcome and when the skill applies.
 5. Include only guidance that changes the quality, safety, or consistency of the result.
 6. Add the catalog entry and run the checks.
@@ -39,6 +39,18 @@ Use this skill when ...
 
 Do not ...
 ```
+
+Add `evals.json` beside it so reviewers can check both activation and results:
+
+```json
+{
+  "shouldTrigger": ["A realistic request that needs this workflow."],
+  "shouldNotTrigger": ["A similar request that needs a different workflow."],
+  "expectations": ["A concrete property the finished result must have."]
+}
+```
+
+Use at least three realistic examples in each trigger list and at least three observable outcome expectations. Near-misses are more useful than unrelated negative examples.
 
 Its matching `catalog.json` entry:
 
@@ -93,4 +105,4 @@ Then check the homepage, library search and filters, mobile layout, contribution
 
 ## Review checklist
 
-Reviewers check that a public contribution is useful, distinct, concise, safe, least-privilege, and understandable without private context. Review determines public discoverability; it does not prevent users from installing the same capability privately.
+Reviewers check that a public contribution is useful, distinct, concise, safe, least-privilege, and understandable without private context. They also review its trigger examples for overlap with nearby skills and its expectations for outcomes a user can verify. Review determines public discoverability; it does not prevent users from installing the same capability privately.

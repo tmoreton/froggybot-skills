@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v9",
+  "release": "skills-v10",
   "tools": [
     {
       "id": "web",
@@ -14,7 +14,8 @@
       "tags": ["web", "reading"],
       "actions": ["Read a web page", "Summarize a source"],
       "runtime": { "kind": "stan_builtin", "name": "web_fetch" },
-      "enabled": true
+      "enabled": true,
+      "listed": false
     },
     {
       "id": "web_search",
@@ -142,13 +143,24 @@
       "category": "Web",
       "author": "FroggyBot",
       "tags": ["browser", "websites"],
-      "featured": true,
       "actions": ["Navigate websites", "Use page controls", "Read visible content"],
       "runtime": { "kind": "agentcore", "name": "browser" },
       "enabled": true
     }
   ],
   "skills": [
+    {
+      "id": "group-intake",
+      "version": 1,
+      "name": "Group Intake",
+      "description": "Collect each person’s constraints and unanswered questions before a group plans or decides.",
+      "category": "Groups",
+      "author": "FroggyBot",
+      "tags": ["groups", "intake", "requirements", "preferences"],
+      "featured": true,
+      "path": "skills/group-intake/SKILL.md",
+      "requiredToolIds": ["task_list"]
+    },
     {
       "id": "trip-planner",
       "version": 2,
@@ -205,7 +217,6 @@
       "category": "Research",
       "author": "FroggyBot",
       "tags": ["deep research", "synthesis"],
-      "featured": true,
       "path": "skills/deep-research/SKILL.md",
       "requiredToolIds": ["web", "web_search", "task_list", "delegate"]
     },
@@ -217,7 +228,6 @@
       "category": "Analysis",
       "author": "FroggyBot",
       "tags": ["data", "files", "analysis"],
-      "featured": true,
       "path": "skills/data-analyst/SKILL.md",
       "requiredToolIds": ["calculator", "code_interpreter"]
     }

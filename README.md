@@ -4,7 +4,6 @@ This is the public home for FroggyBot’s website, public skills, and discoverab
 
 - [froggybot.com](https://froggybot.com) is built from `site/` and published with GitHub Pages after every push to `main`.
 - `skills/` contains readable, instruction-only ways of working.
-- `archive/skills/` preserves retired examples without shipping them in the catalog.
 - `tools/` contains the canonical, narrowly scoped OpenAPI definitions for reviewed external services.
 - `catalog.json` is the machine-readable directory consumed by the website and FroggyBot app.
 
@@ -14,6 +13,7 @@ The Expo web app that mirrors iOS is separate at [app.froggybot.com](https://app
 
 ```text
 skills/<skill-id>/SKILL.md   One public skill per folder
+skills/<skill-id>/evals.json Trigger examples and outcome expectations
 tools/<provider>/            Reviewed external API definitions
 infrastructure/              Declarative deployment for provider-specific gateway targets
 site/                        Static froggybot.com source
@@ -29,8 +29,9 @@ docs/                        Catalog decisions and maintainer notes
 2. Fork this repository and copy the closest folder under `skills/`.
 3. Give the folder a lowercase, hyphenated ID such as `trip-planner`.
 4. Write a concise `SKILL.md` with only `name` and `description` in its frontmatter.
-5. Add the public metadata and reviewed `requiredToolIds` to `catalog.json`.
-6. Run the checks below and open a pull request.
+5. Add an `evals.json` file with realistic matches, near-misses, and outcome expectations.
+6. Add the public metadata and reviewed `requiredToolIds` to `catalog.json`.
+7. Run the checks below and open a pull request.
 
 ```bash
 python3 scripts/validate_catalog.py

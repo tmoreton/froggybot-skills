@@ -13,15 +13,16 @@ The public catalog should contain workflows that materially change how a result 
 - Group Trip Planner
 - Event Planner
 - Group Decision Helper
+- Group Intake
 - Shared Budget
 - Deep Research
 - Data Workspace
 
-The four group workflows are the product's core. Deep Research and Data Workspace remain as broadly useful advanced workflows. Fourteen generic or service-wrapper skills moved to `archive/skills/`; their history remains available without cluttering the app.
+The five group workflows are the product's core. Deep Research and Data Workspace remain as broadly useful advanced workflows. Generic and service-wrapper skills were removed because the base model already covers them and Git history preserves their earlier examples.
 
 ## Tool presentation
 
-User-facing tools are Web Reader, Web Search, Shared Lists, Files & Data, Interactive Browser, YouTube, and X. Calculator, World Clock, and Focused Delegate remain enabled as internal dependencies but are not shown as choices. X is read-only and limited to recent public-post research.
+User-facing tools are Web Search, Shared Lists, Files & Data, Interactive Browser, YouTube, and X. Web Reader, Calculator, World Clock, and Focused Delegate remain enabled as internal dependencies but are not shown as choices. X is read-only and limited to recent public-post research.
 
 ## Connection model
 

@@ -39,6 +39,27 @@ class SiteTests(unittest.TestCase):
         catalog = json.loads((ROOT / "catalog.json").read_text())
         self.assertEqual(catalog["repository"], "tmoreton/frogbot-skills")
 
+    def test_featured_skills_are_core_group_workflows(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        featured = {skill["id"] for skill in catalog["skills"] if skill.get("featured")}
+        self.assertEqual(
+            featured,
+            {
+                "group-intake",
+                "trip-planner",
+                "event-planner",
+                "group-decision",
+                "shared-budget",
+            },
+        )
+
+    def test_implementation_helpers_are_not_listed(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        tools = {tool["id"]: tool for tool in catalog["tools"]}
+        for tool_id in ("web", "calculator", "current_time", "delegate"):
+            self.assertFalse(tools[tool_id].get("listed", True), tool_id)
+        self.assertFalse(tools["browser"].get("featured", False))
+
     def test_build_publishes_every_skill_document(self) -> None:
         source_skills = sorted(
             path.relative_to(ROOT) for path in (ROOT / "skills").glob("*/SKILL.md")

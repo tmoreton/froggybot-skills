@@ -146,6 +146,30 @@ def main() -> int:
         if "\nallowed-tools:" in content:
             fail(f"{skill_id} must declare required tools only in catalog.json")
 
+        eval_path = path.parent / "evals.json"
+        if not eval_path.is_file():
+            fail(f"missing evals.json for {skill_id}")
+        try:
+            evals = json.loads(eval_path.read_text())
+        except json.JSONDecodeError as exc:
+            fail(f"invalid evals.json for {skill_id}: {exc.msg}")
+        if not isinstance(evals, dict):
+            fail(f"{skill_id} evals.json must be an object")
+        for field in ("shouldTrigger", "shouldNotTrigger", "expectations"):
+            values = evals.get(field)
+            if (
+                not isinstance(values, list)
+                or len(values) < 3
+                or len(values) != len(set(values))
+                or any(
+                    not isinstance(value, str)
+                    or not value.strip()
+                    or len(value.strip()) > 500
+                    for value in values
+                )
+            ):
+                fail(f"{skill_id} {field} must contain at least 3 unique short strings")
+
         skill_root = path.parent
         for candidate in skill_root.rglob("*"):
             if any(part in {"scripts", "bin"} for part in candidate.relative_to(skill_root).parts):
