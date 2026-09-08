@@ -45,10 +45,20 @@ class SiteTests(unittest.TestCase):
     def test_homepage_promotes_bots_instead_of_capability_parts(self) -> None:
         page = (SITE / "index.html").read_text()
         self.assertIn("Browse ready-made bots", page)
+        self.assertIn("Request beta access", page)
+        self.assertIn("Private beta", page)
         self.assertIn("data-bot-count", page)
         self.assertNotIn("Browse skills & tools", page)
         self.assertNotIn("data-skill-count", page)
         self.assertNotIn("data-tool-count", page)
+
+    def test_every_public_bot_has_a_concrete_example(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        script = (SITE / "scripts/library.js").read_text()
+        for bot in catalog["bots"]:
+            self.assertIn(f"{bot['id']!r}:", script, bot["id"])
+        self.assertIn("Example request", script)
+        self.assertIn("Typical result", script)
 
     def test_catalog_points_at_current_repository(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())

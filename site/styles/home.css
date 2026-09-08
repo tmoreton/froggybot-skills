@@ -10,6 +10,7 @@
 .hero-copy h1 { max-width: 650px; margin: 19px 0 0; font-size: clamp(48px, 5.5vw, 76px); line-height: 0.98; letter-spacing: -4px; }
 .hero-copy > p:not(.eyebrow) { max-width: 600px; margin: 26px 0 0; color: var(--muted); font-size: 19px; line-height: 1.55; }
 .hero-actions { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.beta-note { margin-top: 14px !important; color: var(--faint) !important; font-size: 13px !important; }
 
 .product-window { overflow: hidden; border: 1px solid #dedacf; border-radius: 28px; background: var(--card); box-shadow: 0 24px 70px rgba(31, 45, 35, 0.11); }
 .window-bar { height: 52px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8e5dd; }
@@ -23,6 +24,8 @@
 .group-name small { margin-top: 4px; color: var(--faint); }
 .message { max-width: 83%; margin-top: 24px; padding: 15px 17px; border-radius: 18px 18px 18px 5px; color: #4e4b45; background: #efede7; line-height: 1.48; }
 .message.person { margin-left: auto; border-radius: 18px 18px 5px 18px; color: var(--white); background: var(--green); }
+.message small { display: block; margin-bottom: 5px; color: #667169; font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+.message.person small { color: #d5eadf; }
 .outputs { margin-top: 25px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .output { padding: 14px; border: 1px solid #dce7df; border-radius: 14px; background: #f6faf7; }
 .output strong { display: block; color: var(--green-dark); font-size: 13px; }

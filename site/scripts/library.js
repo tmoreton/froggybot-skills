@@ -4,6 +4,17 @@ const status = document.querySelector('[data-status]');
 const categories = document.querySelector('[data-categories]');
 const search = document.querySelector('[data-search]');
 
+const examples = {
+  'chief': ['Help us choose a launch plan from these constraints.', 'A resolved decision with the tradeoff, owners, and next actions.'],
+  'trip-planner': ['Plan a walkable weekend under $1,200.', 'A timed itinerary, working budget, and downloadable trip plan.'],
+  'event-planner': ['Turn our venue notes into a launch-night plan.', 'A run of show, owner checklist, and budget risks.'],
+  'research-reports': ['Compare these options and show what supports the choice.', 'A concise evidence summary and polished report.'],
+  'decision-coach': ['Help our group resolve this two-option stalemate.', 'A decision frame, explicit tradeoffs, and a recommended next step.'],
+  'budget-planner': ['Split this trip budget fairly and keep a 15% buffer.', 'A categorized budget, split calculation, and spreadsheet-ready table.'],
+  'data-analyst': ['Explain the signal in this CSV to a nontechnical team.', 'Key findings, caveats, and a decision-ready chart brief.'],
+  'project-organizer': ['Turn these meeting notes into a workable project.', 'Milestones, owners, dependencies, and a prioritized checklist.'],
+};
+
 const searchable = (bot) => [bot.name, bot.tagline, bot.description, bot.category, bot.author, ...(bot.tags || [])]
   .filter(Boolean).join(' ').toLowerCase();
 
@@ -44,8 +55,20 @@ function card(bot) {
     top,
     element('h2', '', bot.name),
     element('p', '', bot.tagline || bot.description),
-    element('p', 'reviewed', `Reviewed · ${bot.author || 'FroggyBot'}`),
   );
+
+  const example = examples[bot.id];
+  if (example) {
+    const preview = element('div', 'example');
+    preview.append(
+      element('span', 'example-label', 'Example request'),
+      element('p', '', `“${example[0]}”`),
+      element('span', 'example-label result-label', 'Typical result'),
+      element('p', 'example-result', example[1]),
+    );
+    article.append(preview);
+  }
+  article.append(element('p', 'reviewed', `Reviewed · ${bot.author || 'FroggyBot'}`));
 
   const details = element('div', 'detail-list');
   [requiredOnSetup ? 'Included with setup' : 'Ready to add', 'Editable after installing'].forEach((value) =>
