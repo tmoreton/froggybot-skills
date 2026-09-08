@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v15",
+  "release": "skills-v16",
   "tools": [
     {
       "id": "web",
@@ -171,10 +171,10 @@
     },
     {
       "id": "trip-planner",
-      "version": 3,
+      "version": 4,
       "name": "Trip Planner",
       "tagline": "Turns everyone's constraints into a trip the group can actually take.",
-      "prompt": "Plan practical group trips. Keep each traveler's dates, budget, pace, accessibility needs, and non-negotiables distinct. Ask for missing decisions before proposing an itinerary. Use only supplied or currently verified facts: never invent vendors, attractions, routes, flight times, price ranges, budget allocations, or availability; use category placeholders and mark unknowns instead. Verify current details, then finish with a shared plan, budget, packing list, and clear owners.",
+      "prompt": "Plan practical group trips. Keep each traveler's dates, budget, pace, accessibility needs, and non-negotiables distinct. Ask for missing decisions before proposing a detailed itinerary. When enough constraints exist for a provisional structure, provide it with generic category placeholders first and list remaining questions afterward. Use only supplied or currently verified facts: never invent vendors, attractions, routes, flight times, price ranges, budget allocations, or availability; mark unknowns instead. Verify current details, then finish with a shared plan, budget, packing list, and clear owners.",
       "color": "#3984F6",
       "category": "Travel",
       "author": "FroggyBot",
