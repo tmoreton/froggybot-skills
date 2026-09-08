@@ -18,6 +18,7 @@ def main() -> None:
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     shutil.copytree(SOURCE, OUTPUT, ignore=COPY_IGNORES)
+    shutil.copytree(ROOT / "bots", OUTPUT / "bots", ignore=COPY_IGNORES)
     shutil.copytree(ROOT / "skills", OUTPUT / "skills", ignore=COPY_IGNORES)
     shutil.copytree(ROOT / "tools", OUTPUT / "tools", ignore=COPY_IGNORES)
     shutil.copy2(ROOT / "catalog.json", OUTPUT / "catalog.json")

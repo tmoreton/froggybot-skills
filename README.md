@@ -1,17 +1,19 @@
 # FroggyBot Skills
 
-This is the public home for FroggyBot’s website, public skills, and discoverable tool definitions.
+This is the public home for FroggyBot’s website and ready-made bots. The same catalog keeps the reusable skills and reviewed tool definitions that power those bots.
 
 - [froggybot.com](https://froggybot.com) is built from `site/` and published with GitHub Pages after every push to `main`.
+- `bots/` contains evaluation scenarios for the small bot configurations in `catalog.json`.
 - `skills/` contains readable, instruction-only ways of working.
 - `tools/` contains the canonical, narrowly scoped OpenAPI definitions for reviewed external services.
-- `catalog.json` is the machine-readable directory consumed by the website and FroggyBot app.
+- `catalog.json` is the machine-readable catalog consumed by the website and FroggyBot app. The website presents its ready-made bots; skills and tools remain composable building blocks in the code.
 
 The Expo web app that mirrors iOS is separate at [app.froggybot.com](https://app.froggybot.com). The public site’s `/invite` page preserves invite parameters and hands them to that app.
 
 ## Repository map
 
 ```text
+bots/<bot-id>/evals.json     Realistic prompts and observable outcome expectations
 skills/<skill-id>/SKILL.md   One public skill per folder
 skills/<skill-id>/evals.json Trigger examples and outcome expectations
 tools/<provider>/            Reviewed external API definitions
@@ -25,7 +27,7 @@ docs/                        Catalog decisions and maintainer notes
 
 ## Contribute a skill
 
-1. Search the [public library](https://froggybot.com/library/) and existing pull requests.
+1. Search `catalog.json` and existing pull requests.
 2. Fork this repository and copy the closest folder under `skills/`.
 3. Give the folder a lowercase, hyphenated ID such as `trip-planner`.
 4. Write a concise `SKILL.md` with only `name` and `description` in its frontmatter.
@@ -42,6 +44,14 @@ python3 scripts/build_site.py
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for the complete review rules and a copyable catalog example. If you only have an idea, use the [skill request form](https://github.com/tmoreton/frogbot-skills/issues/new?template=skill-request.yml).
 
 You do not need a pull request to make a private skill or connect a private MCP server. Add it directly in the FroggyBot app. Repository review is only required to make something publicly discoverable.
+
+## Contribute a bot
+
+A public bot is intentionally just configuration: its identity, prompt, existing skill IDs, and any directly required tool IDs. It never chooses a model, reasoning level, schedule, memory policy, approval mode, or credential. Add its entry to the `bots` array in `catalog.json`, add at least three scenarios under `bots/<bot-id>/evals.json`, and follow the review rules in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Chief is published here like every other bot. FroggyBot setup requires the `chief` template and applies its protected coordinator role after installation; the public configuration itself needs no app-only role or setup fields.
+
+If a private MCP tool needs an API token, add the server in the app under **Skills & tools → Tools → Add tool**, select **Bearer token** or **API key**, and paste the token into the protected credential field. Never add a token to this repository or a bot configuration.
 
 ## Skill rules
 
@@ -76,8 +86,8 @@ The X and YouTube targets are the one deployment exception to the main AgentCore
 
 Every accepted catalog change does two things without a mobile release:
 
-1. GitHub Pages rebuilds the public directory from the new `catalog.json`.
-2. FroggyBot’s AWS backend refreshes the same reviewed catalog and makes available entries selectable in the app.
+1. GitHub Pages rebuilds the public bot directory from the new `catalog.json`.
+2. FroggyBot’s AWS backend refreshes the same reviewed catalog and makes available entries selectable or installable in the app.
 
 Bots remain pinned to the skill version they selected. A user can create a private, editable copy or add a private MCP server without changing the public catalog. Sharing a bot or skill never shares its private connections or credentials.
 

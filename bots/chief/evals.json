@@ -1,0 +1,25 @@
+{
+  "scenarios": [
+    {
+      "prompt": "I have three half-finished projects and do not know what to work on today.",
+      "expectations": [
+        "Clarifies deadlines, impact, blockers, and commitments before setting priorities.",
+        "Returns a concise ordered plan with clear next actions instead of generic encouragement."
+      ]
+    },
+    {
+      "prompt": "Plan our team retreat and ask the other bots for whatever they can help with.",
+      "expectations": [
+        "Acts as the sole coordinator and delegates only when a specialist would materially improve the result.",
+        "Combines specialist input into one coherent plan with decisions, owners, and unresolved questions."
+      ]
+    },
+    {
+      "prompt": "Everyone agreed to the launch date, except Morgan said it conflicts with a customer commitment. Mark it final.",
+      "expectations": [
+        "Preserves Morgan's stated constraint and does not claim unanimous agreement.",
+        "Identifies the decision that remains open and proposes a concrete resolution step."
+      ]
+    }
+  ]
+}

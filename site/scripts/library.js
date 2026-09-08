@@ -1,10 +1,10 @@
-const state = { catalog: null, tab: 'skills', category: 'All', query: '' };
+const state = { bots: null, category: 'All', query: '' };
 const grid = document.querySelector('[data-grid]');
 const status = document.querySelector('[data-status]');
 const categories = document.querySelector('[data-categories]');
 const search = document.querySelector('[data-search]');
 
-const searchable = (item) => [item.name, item.description, item.category, item.author, ...(item.tags || []), ...(item.actions || [])]
+const searchable = (bot) => [bot.name, bot.tagline, bot.description, bot.category, bot.author, ...(bot.tags || [])]
   .filter(Boolean).join(' ').toLowerCase();
 
 const element = (tag, className, text) => {
@@ -14,51 +14,57 @@ const element = (tag, className, text) => {
   return node;
 };
 
-const riskLabel = (risk) => ({
-  interactive: 'Approval before actions',
-  sandbox: 'Runs in a sandbox',
-  read: 'Read-only or local',
-}[risk] || 'Access reviewed before use');
-
-function visibleCatalog(catalog) {
-  const enabledTools = catalog.tools.filter((tool) => tool.enabled !== false);
-  const toolIds = new Set(enabledTools.map((tool) => tool.id));
-  return {
-    tools: enabledTools.filter((tool) => tool.listed !== false),
-    skills: catalog.skills.filter((skill) => (skill.requiredToolIds || []).every((id) => toolIds.has(id))),
-  };
+function visibleBots(catalog) {
+  const tools = catalog.tools.filter((tool) => tool.enabled !== false);
+  const toolIds = new Set(tools.map((tool) => tool.id));
+  const skills = catalog.skills.filter((skill) =>
+    (skill.requiredToolIds || []).every((id) => toolIds.has(id)),
+  );
+  const skillIds = new Set(skills.map((skill) => skill.id));
+  return catalog.bots.filter((bot) =>
+    (bot.skillIds || []).every((id) => skillIds.has(id)) &&
+    (bot.toolIds || []).every((id) => toolIds.has(id)),
+  );
 }
 
 function addBadge(parent, text, featured = false) {
   parent.append(element('span', `badge${featured ? ' featured' : ''}`, text));
 }
 
-function card(item, kind) {
+function card(bot) {
+  const requiredOnSetup = bot.id === 'chief';
   const article = element('article', 'catalog-card');
   const top = element('div', 'card-top');
-  top.append(element('span', `card-mark${kind === 'tool' ? ' tool' : ''}`, kind === 'skill' ? 'S' : 'T'));
+  top.append(element('span', 'card-mark', 'B'));
   const badges = element('div', 'badges');
-  if (item.featured) addBadge(badges, 'Featured', true);
-  addBadge(badges, item.category || 'General');
+  if (bot.featured) addBadge(badges, 'Featured', true);
+  addBadge(badges, bot.category || 'General');
   top.append(badges);
-  article.append(top, element('h2', '', item.name), element('p', '', item.description), element('p', 'reviewed', `Reviewed · ${item.author || 'FroggyBot'}`));
+  article.append(
+    top,
+    element('h2', '', bot.name),
+    element('p', '', bot.tagline || bot.description),
+    element('p', 'reviewed', `Reviewed · ${bot.author || 'FroggyBot'}`),
+  );
 
   const details = element('div', 'detail-list');
-  const values = kind === 'skill'
-    ? ((item.requiredToolIds || []).length ? [`Uses ${item.requiredToolIds.length} ${item.requiredToolIds.length === 1 ? 'tool' : 'tools'}`] : ['Instructions only'])
-    : [...(item.actions || []).slice(0, 3), riskLabel(item.risk)];
-  values.forEach((value) => details.append(element('span', 'detail', value)));
+  [requiredOnSetup ? 'Included with setup' : 'Ready to add', 'Editable after installing'].forEach((value) =>
+    details.append(element('span', 'detail', value)),
+  );
   article.append(details);
 
   const link = element('a', 'button');
-  link.href = `https://app.froggybot.com/app?${kind}=${encodeURIComponent(item.id)}`;
-  link.append(element('span', '', 'Add to a FroggyBot'), element('span', '', '→'));
+  link.href = `https://app.froggybot.com/app?bot=${encodeURIComponent(bot.id)}`;
+  link.append(
+    element('span', '', requiredOnSetup ? 'Open FroggyBot' : 'Add this bot'),
+    element('span', '', '→'),
+  );
   article.append(link);
   return article;
 }
 
-function renderCategories(items) {
-  const values = ['All', ...new Set(items.map((item) => item.category || 'General').sort())];
+function renderCategories(bots) {
+  const values = ['All', ...new Set(bots.map((bot) => bot.category || 'General').sort())];
   if (!values.includes(state.category)) state.category = 'All';
   categories.replaceChildren(...values.map((value) => {
     const button = element('button', 'category', value);
@@ -70,29 +76,19 @@ function renderCategories(items) {
 }
 
 function render() {
-  if (!state.catalog) return;
-  const items = state.catalog[state.tab];
-  renderCategories(items);
+  if (!state.bots) return;
+  renderCategories(state.bots);
   const query = state.query.trim().toLowerCase();
-  const visible = items
-    .filter((item) => state.category === 'All' || (item.category || 'General') === state.category)
-    .filter((item) => !query || searchable(item).includes(query))
+  const visible = state.bots
+    .filter((bot) => state.category === 'All' || (bot.category || 'General') === state.category)
+    .filter((bot) => !query || searchable(bot).includes(query))
     .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || a.name.localeCompare(b.name));
-  grid.replaceChildren(...(visible.length ? visible.map((item) => card(item, state.tab === 'skills' ? 'skill' : 'tool')) : [element('p', 'empty', 'No matches yet. Try another search or category.') ]));
+  grid.replaceChildren(...(visible.length
+    ? visible.map(card)
+    : [element('p', 'empty', 'No matching bots yet. Try another search or category.')]));
   status.hidden = true;
 }
 
-document.querySelectorAll('[data-tab]').forEach((button) => {
-  button.addEventListener('click', () => {
-    state.tab = button.dataset.tab;
-    state.category = 'All';
-    state.query = '';
-    search.value = '';
-    search.placeholder = state.tab === 'skills' ? 'Search skills' : 'Search tools and actions';
-    document.querySelectorAll('[data-tab]').forEach((tab) => tab.setAttribute('aria-selected', String(tab === button)));
-    render();
-  });
-});
 search.addEventListener('input', () => { state.query = search.value; render(); });
 
 fetch('/catalog.json', { cache: 'no-cache' })
@@ -101,9 +97,8 @@ fetch('/catalog.json', { cache: 'no-cache' })
     return response.json();
   })
   .then((catalog) => {
-    state.catalog = visibleCatalog(catalog);
-    document.querySelectorAll('[data-skill-count]').forEach((node) => { node.textContent = state.catalog.skills.length; });
-    document.querySelectorAll('[data-tool-count]').forEach((node) => { node.textContent = state.catalog.tools.length; });
+    state.bots = visibleBots(catalog);
+    document.querySelectorAll('[data-bot-count]').forEach((node) => { node.textContent = state.bots.length; });
     render();
   })
-  .catch(() => { status.textContent = 'The library could not load. Please try again shortly.'; });
+  .catch(() => { status.textContent = 'The bots could not load. Please try again shortly.'; });

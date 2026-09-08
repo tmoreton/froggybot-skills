@@ -8,8 +8,12 @@
     const skills = catalog.skills.filter((skill) =>
       (skill.requiredToolIds || []).every((id) => toolIds.has(id)),
     );
-    document.querySelectorAll('[data-skill-count]').forEach((node) => { node.textContent = skills.length; });
-    document.querySelectorAll('[data-tool-count]').forEach((node) => { node.textContent = tools.length; });
+    const skillIds = new Set(skills.map((skill) => skill.id));
+    const bots = catalog.bots.filter((bot) =>
+      (bot.skillIds || []).every((id) => skillIds.has(id)) &&
+      (bot.toolIds || []).every((id) => toolIds.has(id)),
+    );
+    document.querySelectorAll('[data-bot-count]').forEach((node) => { node.textContent = bots.length; });
   } catch {
     // Counts are progressive enhancement; the page remains complete without them.
   }

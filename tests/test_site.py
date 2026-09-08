@@ -28,12 +28,27 @@ class SiteTests(unittest.TestCase):
         self.assertIn("https://app.froggybot.com/", pages)
         self.assertNotIn('href="/app', pages)
 
-    def test_library_loads_the_same_origin_catalog(self) -> None:
+    def test_bot_directory_loads_the_same_origin_catalog(self) -> None:
         script = (SITE / "scripts/library.js").read_text()
+        page = (SITE / "library/index.html").read_text()
         self.assertIn("fetch('/catalog.json'", script)
         self.assertIn("tool.enabled !== false", script)
-        self.assertIn("tool.listed !== false", script)
         self.assertIn("requiredToolIds", script)
+        self.assertIn("catalog.bots.filter", script)
+        self.assertIn("data-bot-count", page)
+        self.assertNotIn('data-tab="skills"', page)
+        self.assertNotIn('data-tab="tools"', page)
+        self.assertNotIn("data-skill-count", page)
+        self.assertNotIn("data-tool-count", page)
+        self.assertIn("Included with setup", script)
+
+    def test_homepage_promotes_bots_instead_of_capability_parts(self) -> None:
+        page = (SITE / "index.html").read_text()
+        self.assertIn("Browse ready-made bots", page)
+        self.assertIn("data-bot-count", page)
+        self.assertNotIn("Browse skills & tools", page)
+        self.assertNotIn("data-skill-count", page)
+        self.assertNotIn("data-tool-count", page)
 
     def test_catalog_points_at_current_repository(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())
@@ -53,6 +68,40 @@ class SiteTests(unittest.TestCase):
             },
         )
 
+    def test_bot_configs_keep_runtime_choices_and_credentials_out(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        allowed = {
+            "id",
+            "version",
+            "name",
+            "tagline",
+            "prompt",
+            "color",
+            "category",
+            "author",
+            "tags",
+            "featured",
+            "skillIds",
+            "toolIds",
+        }
+        for bot in catalog["bots"]:
+            self.assertLessEqual(set(bot), allowed, bot["id"])
+            self.assertFalse(
+                {"model", "provider", "reasoning", "mode", "token", "credential"}
+                & set(bot),
+                bot["id"],
+            )
+
+    def test_chief_is_a_minimal_public_bot(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        chief = next(bot for bot in catalog["bots"] if bot["id"] == "chief")
+
+        self.assertEqual(chief["name"], "Chief")
+        self.assertEqual(chief["color"], "#007A3D")
+        self.assertEqual(chief["toolIds"], ["current_time"])
+        self.assertNotIn("systemRole", chief)
+        self.assertNotIn("requiredOnSetup", chief)
+
     def test_implementation_helpers_are_not_listed(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())
         tools = {tool["id"]: tool for tool in catalog["tools"]}
@@ -68,6 +117,15 @@ class SiteTests(unittest.TestCase):
             path.relative_to(OUTPUT) for path in (OUTPUT / "skills").glob("*/SKILL.md")
         )
         self.assertEqual(published_skills, source_skills)
+
+    def test_build_publishes_every_bot_evaluation(self) -> None:
+        source_evals = sorted(
+            path.relative_to(ROOT) for path in (ROOT / "bots").glob("*/evals.json")
+        )
+        published_evals = sorted(
+            path.relative_to(OUTPUT) for path in (OUTPUT / "bots").glob("*/evals.json")
+        )
+        self.assertEqual(published_evals, source_evals)
 
     def test_build_publishes_every_tool_schema(self) -> None:
         source_schemas = sorted(

@@ -2,35 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contribute a skill — FroggyBot</title>
-  <meta name="description" content="A start-to-finish guide to proposing and publishing a FroggyBot skill or tool.">
+  <title>Contribute a bot — FroggyBot</title>
+  <meta name="description" content="A start-to-finish guide to proposing and publishing a ready-made FroggyBot.">
   <link rel="icon" href="/assets/favicon.png"><link rel="stylesheet" href="/styles/base.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><a class="wordmark" href="/"><img src="/assets/frogbot.png" alt=""><span>FroggyBot</span></a><nav class="site-nav"><a href="/library/">Skills & tools</a><a class="button-secondary" href="https://app.froggybot.com/">Open app</a></nav></header>
+  <header class="site-header"><a class="wordmark" href="/"><img src="/assets/frogbot.png" alt=""><span>FroggyBot</span></a><nav class="site-nav"><a href="/library/">Bots</a><a class="button-secondary" href="https://app.froggybot.com/">Open app</a></nav></header>
   <main class="doc-page" id="main">
     <p class="eyebrow">Open contribution guide</p>
-    <h1>Add a skill people can trust.</h1>
-    <p>FroggyBot skills are short, readable instructions—not executable plugins. A contributor describes a useful way of working, chooses only the reviewed tools it needs, and opens a pull request.</p>
+    <h1>Add a bot people can trust.</h1>
+    <p>A ready-made bot is a small configuration: a clear name, a focused prompt, and references to any existing skills or tools it needs. There is no separate bot code to maintain.</p>
 
     <h2>Before you start</h2>
     <ul>
-      <li>Search the <a href="/library/">library</a> and existing pull requests so you do not duplicate a skill.</li>
+      <li>Search the <a href="/library/">bot directory</a> and existing pull requests so you do not duplicate a bot.</li>
       <li>Choose one clear user outcome. “Plan a group trip” is stronger than “be helpful.”</li>
-      <li>Never include scripts, binaries, secrets, tokens, or instructions fetched from an unreviewed URL.</li>
+      <li>Never put API tokens, passwords, or other secrets in the catalog. People add required credentials privately inside FroggyBot.</li>
     </ul>
 
-    <h2>Submit a skill</h2>
+    <h2>Submit a bot</h2>
     <ol>
       <li><a href="https://github.com/tmoreton/frogbot-skills/fork">Fork FroggyBot Skills</a> on GitHub.</li>
-      <li>Copy the closest example in <code>skills/</code> into a new lowercase, hyphenated folder.</li>
-      <li>Edit its <code>SKILL.md</code>. Include a short name and description, when to use it, a compact process, and its important limits.</li>
-      <li>Add one entry to <code>catalog.json</code>. Use no more than six useful tags and list only reviewed tool IDs the skill truly requires.</li>
+      <li>Add one bot entry to <code>catalog.json</code>, following the closest existing example.</li>
+      <li>Write a focused prompt, reference existing skill IDs, and list only tools the bot directly requires. The app decides model and speed settings.</li>
+      <li>Add realistic scenarios and expected behavior in <code>bots/&lt;bot-id&gt;/evals.json</code>.</li>
       <li>Run <code>python3 scripts/validate_catalog.py</code>.</li>
       <li>Open a pull request. The checklist will guide the usefulness, clarity, safety, and least-privilege review.</li>
     </ol>
-    <p><a class="button" href="https://github.com/tmoreton/frogbot-skills/issues/new?template=skill-request.yml">Request a skill instead</a></p>
+    <p><a class="button" href="https://github.com/tmoreton/frogbot-skills">View the bot repository</a></p>
+
+    <h2>Contribute a supporting skill</h2>
+    <p>Skills stay in the codebase as reusable, readable instructions that multiple bots can share. If a bot needs a new way of working, add a focused <code>SKILL.md</code>, register it in <code>catalog.json</code>, and reference it from the bot.</p>
+    <p><a class="button-secondary" href="https://github.com/tmoreton/frogbot-skills/issues/new?template=skill-request.yml">Request a skill</a></p>
 
     <h2>Propose a tool</h2>
     <p>Tools can access services or take actions, so they require server-side implementation and a stricter review. Start with a tool request that states:</p>
@@ -44,8 +48,8 @@
     <p><a class="button-secondary" href="https://github.com/tmoreton/frogbot-skills/issues/new?template=tool-request.yml">Propose a tool</a></p>
 
     <h2>What happens after review</h2>
-    <p>Accepted skills are versioned and published from this repository. FroggyBot refreshes the catalog without an app release, while bots already using a skill remain pinned to the version they selected. Users can make a private editable copy without changing the public original.</p>
+    <p>Accepted bots appear in the directory without an app release. Installing one creates a private, editable copy; future catalog changes do not rewrite it. Supporting skills remain versioned so existing bots stay predictable.</p>
   </main>
-  <footer class="site-footer"><span>© 2026 FroggyBot</span><nav class="footer-links"><a href="/">Home</a><a href="/library/">Library</a><a href="https://github.com/tmoreton/frogbot-skills">GitHub</a></nav></footer>
+  <footer class="site-footer"><span>© 2026 FroggyBot</span><nav class="footer-links"><a href="/">Home</a><a href="/library/">Bots</a><a href="https://github.com/tmoreton/frogbot-skills">GitHub</a></nav></footer>
 </body>
 </html>

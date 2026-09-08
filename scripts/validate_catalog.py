@@ -18,6 +18,21 @@ RUNTIME_NAMES = {
 }
 MAX_TAGS = 6
 TOOL_RISKS = {"read", "sandbox", "interactive"}
+BOT_COLORS = {"#007A3D", "#58BEAA", "#FFAA34", "#6C5CE7", "#3984F6", "#F46A27", "#E95383"}
+BOT_FIELDS = {
+    "id",
+    "version",
+    "name",
+    "tagline",
+    "prompt",
+    "color",
+    "category",
+    "author",
+    "tags",
+    "featured",
+    "skillIds",
+    "toolIds",
+}
 REPOSITORY = "tmoreton/frogbot-skills"
 
 
@@ -59,8 +74,8 @@ def validate_public_metadata(item: dict, *, actions: bool = False) -> None:
 
 def main() -> int:
     catalog = json.loads((ROOT / "catalog.json").read_text())
-    if catalog.get("schemaVersion") != 2:
-        fail("catalog schemaVersion must be 2")
+    if catalog.get("schemaVersion") != 3:
+        fail("catalog schemaVersion must be 3")
     if catalog.get("repository") != REPOSITORY:
         fail(f"catalog repository must be {REPOSITORY}")
     if not re.fullmatch(r"skills-v[1-9][0-9]*", str(catalog.get("release", ""))):
@@ -68,8 +83,9 @@ def main() -> int:
 
     tools = catalog.get("tools")
     skills = catalog.get("skills")
-    if not isinstance(tools, list) or not isinstance(skills, list):
-        fail("catalog tools and skills must be arrays")
+    bots = catalog.get("bots")
+    if not isinstance(tools, list) or not isinstance(skills, list) or not isinstance(bots, list):
+        fail("catalog tools, skills, and bots must be arrays")
 
     tool_ids = {tool.get("id") for tool in tools}
     if (
@@ -199,7 +215,79 @@ def main() -> int:
     if orphaned_schemas:
         fail(f"tool schemas missing from catalog.json: {sorted(orphaned_schemas)}")
 
-    print(f"Validated {len(skills)} skills and {len(tools)} tools.")
+    bot_ids: set[str] = set()
+    for bot in bots:
+        bot_id = bot.get("id")
+        if not isinstance(bot_id, str) or not ID_PATTERN.fullmatch(bot_id):
+            fail(f"invalid bot ID: {bot_id!r}")
+        if bot_id in bot_ids:
+            fail(f"duplicate bot ID: {bot_id}")
+        bot_ids.add(bot_id)
+        unsupported_fields = set(bot) - BOT_FIELDS
+        if unsupported_fields:
+            fail(
+                f"{bot_id} has unsupported bot fields: "
+                f"{sorted(unsupported_fields)}"
+            )
+        validate_public_metadata(bot)
+        for field, maximum in (("name", 48), ("tagline", 120), ("prompt", 12_000)):
+            value = bot.get(field)
+            if not isinstance(value, str) or not value.strip() or len(value.strip()) > maximum:
+                fail(f"{bot_id} must include a valid {field}")
+        version = bot.get("version")
+        if not isinstance(version, int) or isinstance(version, bool) or version < 1:
+            fail(f"{bot_id} version must be a positive integer")
+        if bot.get("color") not in BOT_COLORS:
+            fail(f"{bot_id} must use a supported bot color")
+        selected_skills = bot.get("skillIds")
+        if (
+            not isinstance(selected_skills, list)
+            or len(selected_skills) > 12
+            or any(not isinstance(item, str) for item in selected_skills)
+            or len(selected_skills) != len(set(selected_skills))
+            or set(selected_skills) - skill_ids
+        ):
+            fail(f"{bot_id} skillIds must reference up to 12 known skills")
+        selected_tools = bot.get("toolIds", [])
+        if (
+            not isinstance(selected_tools, list)
+            or len(selected_tools) > 12
+            or any(not isinstance(item, str) for item in selected_tools)
+            or len(selected_tools) != len(set(selected_tools))
+            or set(selected_tools) - tool_ids
+        ):
+            fail(f"{bot_id} toolIds must reference up to 12 known tools")
+
+        eval_path = ROOT / "bots" / bot_id / "evals.json"
+        if not eval_path.is_file():
+            fail(f"missing bots/{bot_id}/evals.json")
+        try:
+            scenarios = json.loads(eval_path.read_text()).get("scenarios")
+        except (json.JSONDecodeError, AttributeError) as exc:
+            fail(f"invalid evals.json for {bot_id}: {exc}")
+        if not isinstance(scenarios, list) or len(scenarios) < 3:
+            fail(f"{bot_id} evals must include at least 3 scenarios")
+        for scenario in scenarios:
+            if not isinstance(scenario, dict):
+                fail(f"{bot_id} eval scenario must be an object")
+            prompt = scenario.get("prompt")
+            expectations = scenario.get("expectations")
+            if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 1_000:
+                fail(f"{bot_id} eval prompt must be short text")
+            if (
+                not isinstance(expectations, list)
+                or len(expectations) < 2
+                or len(expectations) != len(set(expectations))
+                or any(not isinstance(value, str) or not value.strip() or len(value) > 500 for value in expectations)
+            ):
+                fail(f"{bot_id} eval expectations must include at least 2 unique strings")
+
+    packaged_bot_ids = {path.parent.name for path in (ROOT / "bots").glob("*/evals.json")}
+    orphaned_bots = packaged_bot_ids - bot_ids
+    if orphaned_bots:
+        fail(f"bot evals missing from catalog.json: {sorted(orphaned_bots)}")
+
+    print(f"Validated {len(skills)} skills, {len(tools)} tools, and {len(bots)} bots.")
     return 0
 
 
