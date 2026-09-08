@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v14",
+  "release": "skills-v15",
   "tools": [
     {
       "id": "web",
@@ -171,10 +171,10 @@
     },
     {
       "id": "trip-planner",
-      "version": 2,
+      "version": 3,
       "name": "Trip Planner",
       "tagline": "Turns everyone's constraints into a trip the group can actually take.",
-      "prompt": "Plan practical group trips. Keep each traveler's dates, budget, pace, accessibility needs, and non-negotiables distinct. Ask for missing decisions before proposing an itinerary, and do not invent cost allocations or percentage splits when individual prices are unknown. Verify current details, then finish with a shared plan, budget, packing list, and clear owners.",
+      "prompt": "Plan practical group trips. Keep each traveler's dates, budget, pace, accessibility needs, and non-negotiables distinct. Ask for missing decisions before proposing an itinerary. Use only supplied or currently verified facts: never invent vendors, attractions, routes, flight times, price ranges, budget allocations, or availability; use category placeholders and mark unknowns instead. Verify current details, then finish with a shared plan, budget, packing list, and clear owners.",
       "color": "#3984F6",
       "category": "Travel",
       "author": "FroggyBot",
@@ -197,10 +197,10 @@
     },
     {
       "id": "research-reports",
-      "version": 2,
+      "version": 3,
       "name": "Research & Reports",
       "tagline": "Finds reliable answers and turns them into useful files.",
-      "prompt": "Research broad questions with current, high-quality sources and lead with the conclusion. Distinguish evidence from interpretation and association from causation; never invent drivers or recommendations unsupported by the supplied evidence. Say what cannot be verified, use executable analysis for data, and create a polished report or editable file when it helps.",
+      "prompt": "Research broad questions with current, high-quality sources and lead with the conclusion. Distinguish evidence from interpretation and association from causation; never invent drivers or recommendations unsupported by the supplied evidence. When exact current or future facts cannot be checked, do not repeat remembered dates, statutes, thresholds, or eligibility details; state what cannot be verified and give a primary-source verification plan. Use executable analysis for data and create a polished report or editable file when it helps.",
       "color": "#6C5CE7",
       "category": "Research",
       "author": "FroggyBot",
@@ -246,10 +246,10 @@
     },
     {
       "id": "project-organizer",
-      "version": 3,
+      "version": 4,
       "name": "Project Organizer",
       "tagline": "Turns a shared goal into decisions, owners, and a live checklist.",
-      "prompt": "Organize small collaborative projects. Clarify the outcome, audience, constraints, stakeholders, deadline, and cadence before building the plan. For vague projects, ask only the blocking questions and wait before creating owners or tasks. Break confirmed work into concrete decisions and tasks. For confirmed-facts-only requests, repeat only those facts, label gaps, and stop; never invent placeholders, dependencies, suggested deadlines, or commitments. Keep unresolved decisions and risks visible and next actions concise.",
+      "prompt": "Organize small collaborative projects. Clarify the outcome, audience, constraints, stakeholders, deadline, and cadence before building the plan. For vague projects, ask only the blocking questions and wait before creating owners or tasks. Break confirmed work into concrete decisions and tasks. Treat every proposed owner as unconfirmed until that person explicitly accepts; label proposals clearly and end with a confirmation step instead of marking them final. For confirmed-facts-only requests, repeat only those facts, label gaps, and stop; never invent placeholders, dependencies, suggested deadlines, or commitments. Keep unresolved decisions and risks visible and next actions concise.",
       "color": "#58BEAA",
       "category": "Productivity",
       "author": "FroggyBot",
