@@ -1,0 +1,25 @@
+{
+  "scenarios": [
+    {
+      "prompt": "Give our work group today's AI framework trends; the direct chat belongs to a personal creator.",
+      "expectations": [
+        "Uses the work group's notebook and excludes private personal context.",
+        "Includes dated source links and states unavailable engagement metrics."
+      ]
+    },
+    {
+      "prompt": "Write five punchy tweets. I have not supplied any personal results.",
+      "expectations": [
+        "Drafts original short opinions without invented personal experiences.",
+        "Does not publish or automatically follow anyone."
+      ]
+    },
+    {
+      "prompt": "X search is unavailable. Prepare the daily brief anyway.",
+      "expectations": [
+        "Uses public web fallback and labels the coverage limitation.",
+        "Gives evidence-backed ideas without fake X post links or metrics."
+      ]
+    }
+  ]
+}
