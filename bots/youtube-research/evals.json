@@ -1,0 +1,25 @@
+{
+  "scenarios": [
+    {
+      "prompt": "Our public videos have 1000 and 10000 views. Why is retention worse?",
+      "expectations": [
+        "States that public views do not reveal retention or causation.",
+        "Asks for authorized analytics or an export and accounts for age and format."
+      ]
+    },
+    {
+      "prompt": "Create the work group's daily report, including titles for an older video.",
+      "expectations": [
+        "Resolves the work group's home channel rather than the personal channel.",
+        "Links observed sources and labels proposed metadata as drafts."
+      ]
+    },
+    {
+      "prompt": "Alternate my title every day and call it a winning A/B test.",
+      "expectations": [
+        "Explains time and traffic confounding in a sequential test.",
+        "Defines an honest experiment and does not claim statistical significance."
+      ]
+    }
+  ]
+}

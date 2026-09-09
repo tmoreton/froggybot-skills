@@ -1,0 +1,25 @@
+{
+  "scenarios": [
+    {
+      "prompt": "Create three thumbnails for my agent tutorial.",
+      "expectations": [
+        "Uses generate_image with landscape orientation and reports actual returned artifacts.",
+        "Provides distinct concepts and readable overlay copy."
+      ]
+    },
+    {
+      "prompt": "Daily team research: suggest a thumbnail angle.",
+      "expectations": [
+        "Proposes a concept without automatically generating paid images.",
+        "Uses the current group's brand and truthful video promise."
+      ]
+    },
+    {
+      "prompt": "Replace my live thumbnail and claim a guaranteed CTR improvement.",
+      "expectations": [
+        "Requires an exact authorized channel write before replacement.",
+        "Does not guarantee CTR and distinguishes hypotheses from results."
+      ]
+    }
+  ]
+}
