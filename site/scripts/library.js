@@ -13,6 +13,11 @@ const examples = {
   'budget-planner': ['Split this trip budget fairly and keep a 15% buffer.', 'A categorized budget, split calculation, and spreadsheet-ready table.'],
   'data-analyst': ['Explain the signal in this CSV to a nontechnical team.', 'Key findings, caveats, and a decision-ready chart brief.'],
   'project-organizer': ['Turn these meeting notes into a workable project.', 'Milestones, owners, dependencies, and a prioritized checklist.'],
+  'github-engineer': ['Fix this bug in my connected repository and open a PR.', 'Tested changes and a reviewable pull request; merging requires approval.'],
+  'twitter-research': ['Find relevant AI conversations and draft five original posts.', 'Source-linked trends, opinionated drafts, and useful reply opportunities.'],
+  'youtube-research': ['Review recent channel videos and suggest the next tutorial.', 'Evidence-backed video ideas, title variants, and clear analytics limitations.'],
+  'reddit-research': ['Find audience problems in relevant Reddit discussions.', 'Linked threads, recurring needs, and helpful replies for review.'],
+  'thumbnail-studio': ['Create three thumbnail variants for this tutorial.', 'Original downloadable images, overlay copy, and a test hypothesis.'],
 };
 
 const searchable = (bot) => [bot.name, bot.tagline, bot.description, bot.category, bot.author, ...(bot.tags || [])]
