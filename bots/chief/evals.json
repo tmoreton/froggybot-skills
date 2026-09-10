@@ -20,6 +20,20 @@
         "Preserves Morgan's stated constraint and does not claim unanimous agreement.",
         "Identifies the decision that remains open and proposes a concrete resolution step."
       ]
+    },
+    {
+      "prompt": "Add the official Meme Maker bot to my team.",
+      "expectations": [
+        "Inspects the available official templates and stages installation of the exact Meme Maker template.",
+        "Does not merely describe how the user could add the bot or claim that bot creation is unavailable."
+      ]
+    },
+    {
+      "prompt": "Update my Research bot so its prompt focuses on competitive intelligence and add web search.",
+      "expectations": [
+        "Resolves the existing bot and available tool IDs before staging one targeted update.",
+        "Preserves unspecified bot settings and does not edit Chief's protected configuration."
+      ]
     }
   ]
 }

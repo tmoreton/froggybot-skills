@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v16",
+  "release": "skills-v17",
   "tools": [
     {
       "id": "web",
@@ -58,6 +58,34 @@
       "runtime": { "kind": "local", "name": "current_time" },
       "enabled": true,
       "listed": false
+    },
+    {
+      "id": "bot_manager",
+      "name": "Bot manager",
+      "description": "Let Chief inspect, install, create, and update bots in the user's roster.",
+      "provider": "frogbot",
+      "risk": "sandbox",
+      "category": "Internal",
+      "author": "FroggyBot",
+      "tags": ["bots", "configuration", "chief"],
+      "actions": ["List bot options", "Install a bot template", "Create a bot", "Update a bot"],
+      "runtime": { "kind": "local", "name": "bot_manager" },
+      "enabled": true,
+      "listed": false
+    },
+    {
+      "id": "meme_composer",
+      "name": "Meme composer",
+      "description": "Overlay readable captions on an image template supplied by the user and save a finished PNG.",
+      "provider": "frogbot",
+      "risk": "sandbox",
+      "category": "Creative",
+      "author": "FroggyBot",
+      "tags": ["memes", "images", "captions", "creative"],
+      "featured": true,
+      "actions": ["Caption an image", "Make a top-and-bottom meme", "Add a caption bar"],
+      "runtime": { "kind": "local", "name": "meme_composer" },
+      "enabled": true
     },
     {
       "id": "x_search",
@@ -151,10 +179,10 @@
   "bots": [
     {
       "id": "chief",
-      "version": 3,
+      "version": 4,
       "name": "Chief",
       "tagline": "Keeps the work moving and connects the dots.",
-      "prompt": "Act as my chief of staff and the sole coordinator for my other bots. Gather only the missing inputs that could change the work. For an initial request missing core facts, ask no more than four compact, grouped questions; do not mention delegation, specialists, or what you will produce next. Preserve each person's constraints, choose the specialist whose description best matches the job, and give handoffs a decision question, inputs, units or timeframe, and desired output. Turn decisions into clear owners and next actions. Keep answers concise.",
+      "prompt": "Act as my chief of staff and the sole coordinator for my other bots. Gather only the missing inputs that could change the work. For an initial request missing core facts, ask no more than four compact, grouped questions; do not mention delegation, specialists, or what you will produce next. Preserve each person's constraints, choose the specialist whose description best matches the job, and give handoffs a decision question, inputs, units or timeframe, and desired output. When I explicitly ask to add or change a bot, inspect the available bot templates, tools, and skills, then install, create, or update exactly one non-Chief bot with the bot-management tools. Turn decisions into clear owners and next actions. Keep answers concise.",
       "color": "#007A3D",
       "category": "Coordination",
       "author": "FroggyBot",
@@ -167,7 +195,7 @@
         "event-planner",
         "shared-budget"
       ],
-      "toolIds": ["current_time"]
+      "toolIds": ["current_time", "bot_manager"]
     },
     {
       "id": "trip-planner",
@@ -255,6 +283,19 @@
       "author": "FroggyBot",
       "tags": ["projects", "tasks", "groups", "planning"],
       "skillIds": ["group-intake", "group-decision"]
+    },
+    {
+      "id": "meme-maker",
+      "version": 1,
+      "name": "Meme Maker",
+      "tagline": "Turns familiar image templates into finished, captioned memes.",
+      "prompt": "Create concise, readable memes from image templates attached by the user. Preserve the supplied image, write or refine the caption copy when asked, choose the layout that fits the format, and use the meme compositor to produce a finished PNG. Ask for an image template only when none is attached. Do not claim that a meme was created until the compositor succeeds.",
+      "color": "#E95383",
+      "category": "Creative",
+      "author": "FroggyBot",
+      "tags": ["memes", "images", "captions", "social"],
+      "featured": true,
+      "skillIds": ["meme-maker"]
     }
   ],
   "skills": [
@@ -339,6 +380,18 @@
       "tags": ["data", "files", "analysis"],
       "path": "skills/data-analyst/SKILL.md",
       "requiredToolIds": ["calculator", "code_interpreter"]
+    },
+    {
+      "id": "meme-maker",
+      "version": 1,
+      "name": "Meme Maker",
+      "description": "Write punchy meme copy and render it onto an image template supplied by the user.",
+      "category": "Creative",
+      "author": "FroggyBot",
+      "tags": ["memes", "images", "captions", "social"],
+      "featured": false,
+      "path": "skills/meme-maker/SKILL.md",
+      "requiredToolIds": ["meme_composer"]
     }
   ]
 }

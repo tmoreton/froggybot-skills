@@ -13,6 +13,7 @@ const examples = {
   'budget-planner': ['Split this trip budget fairly and keep a 15% buffer.', 'A categorized budget, split calculation, and spreadsheet-ready table.'],
   'data-analyst': ['Explain the signal in this CSV to a nontechnical team.', 'Key findings, caveats, and a decision-ready chart brief.'],
   'project-organizer': ['Turn these meeting notes into a workable project.', 'Milestones, owners, dependencies, and a prioritized checklist.'],
+  'meme-maker': ['Turn this attached image into a launch-day meme.', 'A concise caption and a finished, readable PNG using the supplied template.'],
 };
 
 const searchable = (bot) => [bot.name, bot.tagline, bot.description, bot.category, bot.author, ...(bot.tags || [])]

@@ -108,14 +108,14 @@ class SiteTests(unittest.TestCase):
 
         self.assertEqual(chief["name"], "Chief")
         self.assertEqual(chief["color"], "#007A3D")
-        self.assertEqual(chief["toolIds"], ["current_time"])
+        self.assertEqual(chief["toolIds"], ["current_time", "bot_manager"])
         self.assertNotIn("systemRole", chief)
         self.assertNotIn("requiredOnSetup", chief)
 
     def test_implementation_helpers_are_not_listed(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())
         tools = {tool["id"]: tool for tool in catalog["tools"]}
-        for tool_id in ("web", "calculator", "current_time", "delegate"):
+        for tool_id in ("web", "calculator", "current_time", "delegate", "bot_manager"):
             self.assertFalse(tools[tool_id].get("listed", True), tool_id)
         self.assertFalse(tools["browser"].get("featured", False))
 
