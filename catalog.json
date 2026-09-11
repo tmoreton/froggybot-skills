@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v20",
+  "release": "skills-v21",
   "tools": [
     {
       "id": "web",
@@ -91,8 +91,8 @@
     {
       "id": "image_generator",
       "name": "Image generator",
-      "description": "Create original images with Amazon Bedrock or compose polished 1280x720 thumbnails with exact text and recent user images.",
-      "provider": "amazon-bedrock",
+      "description": "Create original images and polished reference-aware 1280x720 thumbnails with OpenRouter image models.",
+      "provider": "openrouter",
       "risk": "interactive",
       "category": "Creative",
       "author": "FroggyBot",
@@ -410,7 +410,7 @@
     },
     {
       "id": "youtube-thumbnail-director",
-      "version": 1,
+      "version": 2,
       "name": "YouTube Thumbnail Director",
       "description": "Turn a video's promise into a polished, mobile-readable YouTube thumbnail with deliberate art direction and exact overlays.",
       "category": "Creative",

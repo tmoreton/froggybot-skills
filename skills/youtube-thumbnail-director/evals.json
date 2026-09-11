@@ -10,8 +10,8 @@
     "Upload this finished thumbnail to my YouTube channel."
   ],
   "expectations": [
-    "The background prompt turns the video's promise into one focal visual story with explicit hierarchy, contrast, lighting, and overlay-safe negative space.",
-    "Comparison thumbnails use deliberate opposing visual worlds rather than generic desks, monitors, or decorative objects.",
-    "Finished thumbnails use the compositor for exact text and supplied images, keep the hook readable at phone size, and claim success only after a PNG is returned."
+    "The visual brief turns the video's promise into one focal story with explicit hierarchy, contrast, lighting, and a generous crop-safe area.",
+    "Comparison variants change the visual story and layout instead of repeating a diagonal split, circular portrait, boxed logo, or generic tech background.",
+    "Finished thumbnails send the complete composition, exact copy, and selected image references to OpenRouter, keep the hook readable at phone size, and claim success only after a 1280x720 PNG is returned."
   ]
 }
