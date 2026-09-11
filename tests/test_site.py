@@ -115,9 +115,31 @@ class SiteTests(unittest.TestCase):
     def test_implementation_helpers_are_not_listed(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())
         tools = {tool["id"]: tool for tool in catalog["tools"]}
-        for tool_id in ("web", "calculator", "current_time", "delegate", "bot_manager"):
+        for tool_id in (
+            "web",
+            "calculator",
+            "current_time",
+            "delegate",
+            "bot_manager",
+            "meme_lord",
+        ):
             self.assertFalse(tools[tool_id].get("listed", True), tool_id)
         self.assertFalse(tools["browser"].get("featured", False))
+
+    def test_meme_lord_is_the_only_public_meme_capability(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        meme_tool_ids = {
+            tool["id"] for tool in catalog["tools"] if "meme" in tool["id"]
+        }
+        visible_tools = [tool for tool in catalog["tools"] if tool.get("listed", True)]
+        meme_tools = [tool for tool in visible_tools if "meme" in tool["id"]]
+        meme_skills = [skill for skill in catalog["skills"] if "meme" in skill["id"]]
+        meme_bots = [bot for bot in catalog["bots"] if "meme" in bot["id"]]
+
+        self.assertEqual(meme_tool_ids, {"meme_lord"})
+        self.assertEqual(meme_tools, [])
+        self.assertEqual([skill["name"] for skill in meme_skills], ["Meme Lord"])
+        self.assertEqual([bot["name"] for bot in meme_bots], ["Meme Lord"])
 
     def test_build_publishes_every_skill_document(self) -> None:
         source_skills = sorted(

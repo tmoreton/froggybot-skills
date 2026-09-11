@@ -22,9 +22,9 @@
       ]
     },
     {
-      "prompt": "Add the official Meme Maker bot to my team.",
+      "prompt": "Add the official Meme Lord bot to my team.",
       "expectations": [
-        "Inspects the available official templates and stages installation of the exact Meme Maker template.",
+        "Inspects the available official templates and stages installation of the exact Meme Lord template.",
         "Does not merely describe how the user could add the bot or claim that bot creation is unavailable."
       ]
     },

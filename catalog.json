@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v17",
+  "release": "skills-v19",
   "tools": [
     {
       "id": "web",
@@ -74,17 +74,32 @@
       "listed": false
     },
     {
-      "id": "meme_composer",
-      "name": "Meme composer",
-      "description": "Overlay readable captions on an image template supplied by the user and save a finished PNG.",
+      "id": "meme_lord",
+      "name": "Meme Lord",
+      "description": "Internal image actions used by the Meme Lord skill.",
       "provider": "frogbot",
       "risk": "sandbox",
       "category": "Creative",
       "author": "FroggyBot",
       "tags": ["memes", "images", "captions", "creative"],
+      "featured": false,
+      "listed": false,
+      "actions": ["Find a meme template", "Caption a stored template", "Caption an attached image", "Add a caption bar"],
+      "runtime": { "kind": "local", "name": "meme_lord" },
+      "enabled": true
+    },
+    {
+      "id": "image_generator",
+      "name": "Image generator",
+      "description": "Create one original image from a text prompt with Meta Muse Image and save it as a PNG.",
+      "provider": "openrouter",
+      "risk": "interactive",
+      "category": "Creative",
+      "author": "FroggyBot",
+      "tags": ["images", "generation", "illustration", "creative"],
       "featured": true,
-      "actions": ["Caption an image", "Make a top-and-bottom meme", "Add a caption bar"],
-      "runtime": { "kind": "local", "name": "meme_composer" },
+      "actions": ["Create an original image", "Generate an illustration", "Render a visual concept"],
+      "runtime": { "kind": "local", "name": "image_generator" },
       "enabled": true
     },
     {
@@ -286,10 +301,10 @@
     },
     {
       "id": "meme-maker",
-      "version": 1,
-      "name": "Meme Maker",
+      "version": 2,
+      "name": "Meme Lord",
       "tagline": "Turns familiar image templates into finished, captioned memes.",
-      "prompt": "Create concise, readable memes from image templates attached by the user. Preserve the supplied image, write or refine the caption copy when asked, choose the layout that fits the format, and use the meme compositor to produce a finished PNG. Ask for an image template only when none is attached. Do not claim that a meme was created until the compositor succeeds.",
+      "prompt": "Create concise, readable memes from a stored popular template or an image supplied by the user. Preserve the source image, write or refine the caption copy when asked, choose the layout that fits the format, and use the Meme Lord image actions to produce a finished PNG. Ask for an image only when no suitable stored template exists. Do not claim that a meme was created until rendering succeeds.",
       "color": "#E95383",
       "category": "Creative",
       "author": "FroggyBot",
@@ -383,15 +398,15 @@
     },
     {
       "id": "meme-maker",
-      "version": 1,
-      "name": "Meme Maker",
-      "description": "Write punchy meme copy and render it onto an image template supplied by the user.",
+      "version": 3,
+      "name": "Meme Lord",
+      "description": "Write punchy meme copy and render it on a stored popular template or an image supplied by the user.",
       "category": "Creative",
       "author": "FroggyBot",
       "tags": ["memes", "images", "captions", "social"],
       "featured": false,
       "path": "skills/meme-maker/SKILL.md",
-      "requiredToolIds": ["meme_composer"]
+      "requiredToolIds": ["meme_lord"]
     }
   ]
 }
