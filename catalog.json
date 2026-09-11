@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v19",
+  "release": "skills-v20",
   "tools": [
     {
       "id": "web",
@@ -91,14 +91,14 @@
     {
       "id": "image_generator",
       "name": "Image generator",
-      "description": "Create one original image from a text prompt with Meta Muse Image and save it as a PNG.",
-      "provider": "openrouter",
+      "description": "Create original images with Amazon Bedrock or compose polished 1280x720 thumbnails with exact text and recent user images.",
+      "provider": "amazon-bedrock",
       "risk": "interactive",
       "category": "Creative",
       "author": "FroggyBot",
       "tags": ["images", "generation", "illustration", "creative"],
       "featured": true,
-      "actions": ["Create an original image", "Generate an illustration", "Render a visual concept"],
+      "actions": ["Create an original image", "Generate an illustration", "Create a YouTube thumbnail", "Place exact text and recent images"],
       "runtime": { "kind": "local", "name": "image_generator" },
       "enabled": true
     },
@@ -407,6 +407,17 @@
       "featured": false,
       "path": "skills/meme-maker/SKILL.md",
       "requiredToolIds": ["meme_lord"]
+    },
+    {
+      "id": "youtube-thumbnail-director",
+      "version": 1,
+      "name": "YouTube Thumbnail Director",
+      "description": "Turn a video's promise into a polished, mobile-readable YouTube thumbnail with deliberate art direction and exact overlays.",
+      "category": "Creative",
+      "author": "FroggyBot",
+      "tags": ["youtube", "thumbnails", "images", "creative"],
+      "path": "skills/youtube-thumbnail-director/SKILL.md",
+      "requiredToolIds": ["image_generator"]
     }
   ]
 }

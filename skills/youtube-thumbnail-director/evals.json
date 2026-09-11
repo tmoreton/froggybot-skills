@@ -1,0 +1,17 @@
+{
+  "shouldTrigger": [
+    "Create a YouTube thumbnail for my Claude Code versus Codex comparison using my photo and the uploaded logos.",
+    "Give me three strong thumbnail concepts for a video about replacing a coding workflow with AI agents.",
+    "Make a polished 16:9 thumbnail with the headline I TESTED BOTH and the subheadline ONE WINS."
+  ],
+  "shouldNotTrigger": [
+    "Make a Drake meme about flaky tests.",
+    "Generate a square watercolor illustration of a frog reading a book.",
+    "Upload this finished thumbnail to my YouTube channel."
+  ],
+  "expectations": [
+    "The background prompt turns the video's promise into one focal visual story with explicit hierarchy, contrast, lighting, and overlay-safe negative space.",
+    "Comparison thumbnails use deliberate opposing visual worlds rather than generic desks, monitors, or decorative objects.",
+    "Finished thumbnails use the compositor for exact text and supplied images, keep the hook readable at phone size, and claim success only after a PNG is returned."
+  ]
+}
