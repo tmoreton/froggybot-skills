@@ -54,6 +54,9 @@ class SiteTests(unittest.TestCase):
         self.assertIn("icon.alt = ''", script)
         self.assertNotIn("element('span', 'card-mark', 'B')", script)
         self.assertIn("hue-rotate(var(--bot-hue-shift", styles)
+        page = (SITE / "library/index.html").read_text()
+        self.assertIn('/styles/library.css?v=2', page)
+        self.assertIn('/scripts/library.js?v=2', page)
 
     def test_homepage_promotes_bots_instead_of_capability_parts(self) -> None:
         page = (SITE / "index.html").read_text()
