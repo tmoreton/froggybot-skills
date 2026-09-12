@@ -88,9 +88,9 @@ class SiteTests(unittest.TestCase):
             "apikeycredentialprovider/${YouTubeCredentialProviderName}", template
         )
         self.assertIn(
-            "workload-identity/${GatewayName}-*", template
+            "workload-identity/${GatewayIdentifier}", template
         )
-        self.assertIn("Default: FrogBot-FrogBotTools", template)
+        self.assertNotIn("GatewayName:", template)
         self.assertIn("releases/${Release}/x/openapi.yaml", template)
         self.assertIn("releases/${Release}/youtube/openapi.yaml", template)
         self.assertNotIn("releases/${Release}/*", template)
