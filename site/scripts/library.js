@@ -16,6 +16,10 @@ const examples = {
   'meme-maker': ['Turn this attached image into a launch-day meme.', 'A concise caption and a finished, readable PNG using the supplied template.'],
   'youtube-studio': ['Find my strongest next video angle and create its thumbnail.', 'A sourced opportunity, title and outline options, plus—after image approval and visual checking—a 1280×720 thumbnail with any text issue clearly reported.'],
   'trend-scout': ['What is starting to break out in my niche this week?', 'A cross-platform watchlist with evidence, confidence, and concrete tests.'],
+  'morning-brief': ['Brief me on the developments that matter to my priorities today.', 'A dated, source-backed briefing with relevance, next actions, and coverage gaps.'],
+  'social-writer': ['Turn this launch article into a LinkedIn post and an X thread.', 'Distinct platform-ready drafts with grounded claims and a factual-review checklist.'],
+  'meeting-prep': ['Prepare me for tomorrow’s 30-minute partnership meeting.', 'A focused context brief, agenda, questions, risks, and preparation checklist.'],
+  'career-coach': ['Tailor my resume and interview prep to this posted role.', 'Truthful, role-specific materials with evidence gaps and an editable output.'],
 };
 
 const searchable = (bot) => [bot.name, bot.tagline, bot.description, bot.category, bot.author, ...(bot.tags || [])]

@@ -234,6 +234,35 @@ class SiteTests(unittest.TestCase):
             {"youtube_search", "x_search", "web_search", "delegate"},
         )
 
+    def test_everyday_bots_use_least_privilege_capability_bundles(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        bots = {bot["id"]: bot for bot in catalog["bots"]}
+        skills = {skill["id"]: skill for skill in catalog["skills"]}
+        tools = {tool["id"]: tool for tool in catalog["tools"]}
+        expected_tools = {
+            "morning-brief": {"web", "web_search", "current_time", "task_list"},
+            "social-writer": {"web", "web_search", "x_search", "current_time"},
+            "meeting-prep": {"web", "web_search", "current_time", "task_list"},
+            "career-coach": {"web", "web_search", "code_interpreter"},
+        }
+
+        for bot_id, tool_ids in expected_tools.items():
+            self.assertEqual(bots[bot_id]["skillIds"], [bot_id])
+            self.assertEqual(set(skills[bot_id]["requiredToolIds"]), tool_ids)
+            self.assertFalse(
+                {"browser", "image_generator", "bot_manager"} & tool_ids,
+                bot_id,
+            )
+            self.assertTrue(
+                all(tools[tool_id]["risk"] != "interactive" for tool_id in tool_ids),
+                bot_id,
+            )
+
+        self.assertTrue(bots["morning-brief"]["featured"])
+        self.assertTrue(bots["social-writer"]["featured"])
+        self.assertTrue(bots["meeting-prep"]["featured"])
+        self.assertFalse(bots["career-coach"]["featured"])
+
     def test_build_publishes_every_skill_document(self) -> None:
         source_skills = sorted(
             path.relative_to(ROOT) for path in (ROOT / "skills").glob("*/SKILL.md")

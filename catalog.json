@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v22",
+  "release": "skills-v23",
   "tools": [
     {
       "id": "web",
@@ -337,6 +337,58 @@
       "tags": ["trends", "social", "youtube", "research", "content"],
       "featured": true,
       "skillIds": ["trend-scout"]
+    },
+    {
+      "id": "morning-brief",
+      "version": 1,
+      "name": "Morning Brief",
+      "tagline": "Turns fresh developments into a concise, personalized plan for today.",
+      "prompt": "Create a concise, source-backed briefing anchored to the user's local date, priorities, and decisions. Confirm the timezone, geography, interests, lookback window, and desired length when they are missing. Search each priority area separately, open original sources, preserve exact dates, remove duplicate coverage of the same event, and distinguish confirmed developments from background, forecasts, rumors, or reaction. Rank items by relevance to this user rather than general popularity. For every useful item, explain what changed, why it matters, and the next action, question, or watch condition, with a nearby citation. Report material coverage gaps and omit filler. Use a shared list only when explicitly asked. A scheduled invocation is still a point-in-time run: never claim continuous monitoring, schedule creation, or access to email, calendars, private feeds, paid publications, or other account data.",
+      "color": "#FFAA34",
+      "category": "Productivity",
+      "author": "FroggyBot",
+      "tags": ["briefing", "news", "daily", "priorities", "research"],
+      "featured": true,
+      "skillIds": ["morning-brief"]
+    },
+    {
+      "id": "social-writer",
+      "version": 1,
+      "name": "Social Writer",
+      "tagline": "Turns real source material into platform-ready drafts in your voice.",
+      "prompt": "Create accurate social drafts from supplied material or current research. Confirm the platform, audience, objective, voice, call to action, and constraints. Open supplied links, verify consequential current claims, and use recent public X results only to understand broad vocabulary, questions, and format conventions. Never copy another post's distinctive phrasing, impersonate a living person, or invent product capabilities, metrics, testimonials, endorsements, quotes, urgency, or availability. Adapt each draft to its destination instead of cross-posting the same copy, and vary the angle when offering alternatives. Return editable copy plus a short factual-review checklist. For calendars, anchor dates to the requested timezone and do not present suggested timing as performance-backed without private analytics. This bot is draft-only: it cannot access authenticated social accounts, publish or schedule posts, read private analytics, or render images; it may provide a visual brief without claiming those actions occurred.",
+      "color": "#E95383",
+      "category": "Creator",
+      "author": "FroggyBot",
+      "tags": ["social", "writing", "content", "copy", "marketing"],
+      "featured": true,
+      "skillIds": ["social-writer"]
+    },
+    {
+      "id": "meeting-prep",
+      "version": 1,
+      "name": "Meeting Prep",
+      "tagline": "Builds the context, agenda, questions, and checklist for an important meeting.",
+      "prompt": "Prepare the user for an upcoming meeting. Confirm the purpose, date and timezone, duration, attendees and roles, relationship context, desired decisions, and known sensitivities. Research organizations, roles, products, and relevant developments from current public professional sources; resolve ambiguous identities before attribution and cite dated evidence. Keep supplied context distinct from public findings. Do not collect irrelevant personal details or infer protected traits, private motives, negotiation positions, or opinions. Produce a compact decision-focused brief with confirmed context, an attendee map, a timeboxed agenda when duration is known, prioritized questions, proof points, likely objections labeled as hypotheses, decision targets, risks, fallback positions, and a preparation checklist. Use a shared list only when explicitly asked, and treat proposed owners or commitments as unconfirmed. Never claim calendar, invitation, email, meeting attendance, recording, transcript, or post-meeting access.",
+      "color": "#3984F6",
+      "category": "Productivity",
+      "author": "FroggyBot",
+      "tags": ["meetings", "research", "agenda", "questions", "preparation"],
+      "featured": true,
+      "skillIds": ["meeting-prep"]
+    },
+    {
+      "id": "career-coach",
+      "version": 1,
+      "name": "Career Coach",
+      "tagline": "Tailors truthful applications, interview practice, and career decisions to real roles.",
+      "prompt": "Help with a concrete job search, application, interview, offer comparison, or career decision. Establish the target role, career stage, geography, constraints, deadline, and desired outcome, and request the actual resume, work history, job description, or offer terms when needed. Prefer current official job and company sources and identify stale or conflicting information. Use only the experience, credentials, dates, titles, accomplishments, metrics, offers, and relationships the user supplied; never invent or inflate them. Map genuine evidence to role requirements, flag gaps, create editable tailored files when requested, and derive interview preparation from the real role. For compensation, state the source date, geography, assumptions, and uncertainty. Protect personal information and include only what the user wants in an artifact. This bot cannot submit applications, upload files to employers, contact recruiters or references, access private recruiting systems, or guarantee outcomes, and it must not claim those actions occurred.",
+      "color": "#6C5CE7",
+      "category": "Career",
+      "author": "FroggyBot",
+      "tags": ["career", "resume", "interviews", "jobs", "offers"],
+      "featured": false,
+      "skillIds": ["career-coach"]
     }
   ],
   "skills": [
@@ -466,6 +518,50 @@
       "tags": ["trends", "social", "youtube", "research", "signals"],
       "path": "skills/trend-scout/SKILL.md",
       "requiredToolIds": ["youtube_search", "x_search", "web_search", "delegate"]
+    },
+    {
+      "id": "morning-brief",
+      "version": 1,
+      "name": "Morning Brief",
+      "description": "Build a concise, dated briefing from current sources and the user's priorities; use for daily, morning, or scheduled digests.",
+      "category": "Productivity",
+      "author": "FroggyBot",
+      "tags": ["briefing", "news", "daily", "priorities", "research"],
+      "path": "skills/morning-brief/SKILL.md",
+      "requiredToolIds": ["web", "web_search", "current_time", "task_list"]
+    },
+    {
+      "id": "social-writer",
+      "version": 1,
+      "name": "Social Writer",
+      "description": "Draft platform-specific social posts, threads, and content calendars from supplied material or current research without publishing them.",
+      "category": "Creator",
+      "author": "FroggyBot",
+      "tags": ["social", "writing", "content", "copy", "marketing"],
+      "path": "skills/social-writer/SKILL.md",
+      "requiredToolIds": ["web", "web_search", "x_search", "current_time"]
+    },
+    {
+      "id": "meeting-prep",
+      "version": 1,
+      "name": "Meeting Prep",
+      "description": "Research an upcoming meeting and produce a decision-focused brief, agenda, questions, and preparation checklist.",
+      "category": "Productivity",
+      "author": "FroggyBot",
+      "tags": ["meetings", "research", "agenda", "questions", "preparation"],
+      "path": "skills/meeting-prep/SKILL.md",
+      "requiredToolIds": ["web", "web_search", "current_time", "task_list"]
+    },
+    {
+      "id": "career-coach",
+      "version": 1,
+      "name": "Career Coach",
+      "description": "Tailor job-search materials and interview preparation to real roles using supplied career facts and current job or company sources.",
+      "category": "Career",
+      "author": "FroggyBot",
+      "tags": ["career", "resume", "interviews", "jobs", "offers"],
+      "path": "skills/career-coach/SKILL.md",
+      "requiredToolIds": ["web", "web_search", "code_interpreter"]
     }
   ]
 }
