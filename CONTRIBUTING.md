@@ -1,6 +1,6 @@
 # Contributing
 
-FroggyBot Skills accepts small, reviewable additions that help a person or group reach a concrete outcome.
+Frog Bots accepts small, reviewable additions that help a person or group reach a concrete outcome.
 
 ## Choose the right contribution
 

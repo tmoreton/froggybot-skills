@@ -1,4 +1,4 @@
-# FroggyBot Skills
+# Frog Bots
 
 This is the public home for FroggyBot’s website and ready-made bots. The same catalog keeps the reusable skills and reviewed tool definitions that power those bots.
 
@@ -41,7 +41,7 @@ python3 scripts/build_site.py
 python3 -m unittest discover -s tests
 ```
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for the complete review rules and a copyable catalog example. If you only have an idea, use the [skill request form](https://github.com/tmoreton/frogbot-skills/issues/new?template=skill-request.yml).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for the complete review rules and a copyable catalog example. If you only have an idea, use the [skill request form](https://github.com/tmoreton/frog-bots/issues/new?template=skill-request.yml).
 
 You do not need a pull request to make a private instruction-only skill. Add it directly in the FroggyBot app. Repository review is required to make a bot, skill, or tool publicly discoverable.
 
@@ -63,7 +63,7 @@ Installing a public bot never asks the user for a developer API key. FroggyBot s
 
 ## Propose a tool
 
-Tools can access services or take actions. A public proposal must describe the exact actions, data involved, authentication, external side effects, and least permissions needed. Contributors may open a focused pull request directly or start with a [tool request](https://github.com/tmoreton/frogbot-skills/issues/new?template=tool-request.yml) when the shape is still uncertain.
+Tools can access services or take actions. A public proposal must describe the exact actions, data involved, authentication, external side effects, and least permissions needed. Contributors may open a focused pull request directly or start with a [tool request](https://github.com/tmoreton/frog-bots/issues/new?template=tool-request.yml) when the shape is still uncertain.
 
 A remote integration stays hosted by its provider or contributor. Shared public services use FroggyBot-owned credentials; private account data requires a reviewed OAuth connection with the least permissions needed. Public built-ins maintained by FroggyBot are enabled only after their server-side binding is deployed and tested. Secrets and executable integration code never live in this repository or the app bundle.
 
