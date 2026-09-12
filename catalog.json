@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "repository": "tmoreton/frogbot-skills",
-  "release": "skills-v24",
+  "release": "skills-v25",
   "tools": [
     {
       "id": "web",

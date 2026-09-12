@@ -19,7 +19,7 @@ Parameters:
     Description: Private bucket containing immutable schema release objects.
   Release:
     Type: String
-    Default: skills-v24
+    Default: skills-v25
     AllowedPattern: 'skills-v[1-9][0-9]*'
     Description: FroggyBot Skills release containing the deployed schemas.
   XCredentialProviderName:
@@ -65,6 +65,9 @@ Resources:
             Effect: Allow
             Action: bedrock-agentcore:GetResourceApiKey
             Resource:
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default'
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default/workload-identity/${GatewayIdentifier}'
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/default'
               - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/default/apikeycredentialprovider/${XCredentialProviderName}'
               - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/default/apikeycredentialprovider/${YouTubeCredentialProviderName}'
           - Sid: ReadReviewedAgentCoreSecrets

@@ -90,6 +90,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn(
             "workload-identity/${GatewayIdentifier}", template
         )
+        self.assertIn("token-vault/default'", template)
         self.assertNotIn("GatewayName:", template)
         self.assertIn("releases/${Release}/x/openapi.yaml", template)
         self.assertIn("releases/${Release}/youtube/openapi.yaml", template)
