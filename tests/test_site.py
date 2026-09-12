@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -63,6 +64,48 @@ class SiteTests(unittest.TestCase):
     def test_catalog_points_at_current_repository(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())
         self.assertEqual(catalog["repository"], "tmoreton/frogbot-skills")
+
+    def test_gateway_targets_default_to_the_catalog_release(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        template = (ROOT / "infrastructure" / "gateway-targets.yaml").read_text()
+        release_default = re.search(
+            r"(?m)^  Release:\n(?:    .*\n)*?    Default: (\S+)$",
+            template,
+        )
+
+        self.assertIsNotNone(release_default)
+        self.assertEqual(release_default.group(1), catalog["release"])
+
+    def test_gateway_role_can_only_read_declared_provider_credentials(self) -> None:
+        template = (ROOT / "infrastructure" / "gateway-targets.yaml").read_text()
+
+        self.assertIn("!Ref XCredentialSecretArn", template)
+        self.assertIn("!Ref YouTubeCredentialSecretArn", template)
+        self.assertIn(
+            "apikeycredentialprovider/${XCredentialProviderName}", template
+        )
+        self.assertIn(
+            "apikeycredentialprovider/${YouTubeCredentialProviderName}", template
+        )
+        self.assertIn(
+            "workload-identity/${GatewayName}-*", template
+        )
+        self.assertIn("Default: FrogBot-FrogBotTools", template)
+        self.assertIn("releases/${Release}/x/openapi.yaml", template)
+        self.assertIn("releases/${Release}/youtube/openapi.yaml", template)
+        self.assertNotIn("releases/${Release}/*", template)
+        self.assertNotIn("apikeycredentialprovider/*", template)
+        self.assertNotIn("token-vault/*", template)
+        self.assertNotIn("workload-identity-directory/*", template)
+        self.assertNotIn("secret:bedrock-agentcore-identity!*'", template)
+        self.assertNotIn("bedrock-agentcore:GetApiKeyCredential\n", template)
+        self.assertNotIn("bedrock-agentcore-identity!.+$", template)
+        self.assertIn("bedrock-agentcore-identity![A-Za-z0-9/_+=.@-]+$", template)
+        self.assertIn("CredentialPrefix: 'Bearer '", template)
+
+        release_guide = " ".join((ROOT / "README.md").read_text().split())
+        self.assertIn("YouTube Data API **Search Queries** daily quota", release_guide)
+        self.assertIn("Raise that quota or delay publication", release_guide)
 
     def test_featured_skills_are_core_group_workflows(self) -> None:
         catalog = json.loads((ROOT / "catalog.json").read_text())
@@ -140,6 +183,56 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(meme_tools, [])
         self.assertEqual([skill["name"] for skill in meme_skills], ["Meme Lord"])
         self.assertEqual([bot["name"] for bot in meme_bots], ["Meme Lord"])
+
+    def test_creator_bots_bundle_their_reviewed_capabilities(self) -> None:
+        catalog = json.loads((ROOT / "catalog.json").read_text())
+        bots = {bot["id"]: bot for bot in catalog["bots"]}
+        skills = {skill["id"]: skill for skill in catalog["skills"]}
+
+        youtube = bots["youtube-studio"]
+        self.assertEqual(youtube["name"], "Creator Studio")
+        self.assertEqual(
+            youtube["skillIds"],
+            ["youtube-strategy", "youtube-thumbnail-director"],
+        )
+        youtube_tools = {
+            tool_id
+            for skill_id in youtube["skillIds"]
+            for tool_id in skills[skill_id]["requiredToolIds"]
+        }
+        self.assertEqual(skills["youtube-thumbnail-director"]["version"], 3)
+        self.assertEqual(
+            set(skills["youtube-thumbnail-director"]["requiredToolIds"]),
+            {"image_generator"},
+        )
+        self.assertEqual(
+            youtube_tools,
+            {"youtube_search", "web_search", "image_generator"},
+        )
+        self.assertIn("Visually verify the returned image's wording", youtube["prompt"])
+        self.assertIn("unverified or still-flawed result as a draft", youtube["prompt"])
+        image_tool = next(
+            tool for tool in catalog["tools"] if tool["id"] == "image_generator"
+        )
+        self.assertIn("Use requested text and recent images", image_tool["actions"])
+        self.assertNotIn("Place exact text", image_tool["actions"])
+        thumbnail_description = skills["youtube-thumbnail-director"]["description"]
+        self.assertIn("requested text overlays", thumbnail_description)
+        self.assertNotIn("exact overlays", thumbnail_description)
+
+        thumbnail_instructions = (
+            ROOT / "skills" / "youtube-thumbnail-director" / "SKILL.md"
+        ).read_text()
+        self.assertIn("the tool's success message alone is not proof", thumbnail_instructions)
+        self.assertIn("make at most one retry", thumbnail_instructions)
+        self.assertIn("label the image as a draft", thumbnail_instructions)
+
+        trend = bots["trend-scout"]
+        self.assertEqual(trend["skillIds"], ["trend-scout"])
+        self.assertEqual(
+            set(skills["trend-scout"]["requiredToolIds"]),
+            {"youtube_search", "x_search", "web_search", "delegate"},
+        )
 
     def test_build_publishes_every_skill_document(self) -> None:
         source_skills = sorted(

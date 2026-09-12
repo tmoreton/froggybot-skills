@@ -17,8 +17,8 @@
     {
       "prompt": "Make a meme about release day.",
       "expectations": [
-        "Asks the user to attach the image template because none was supplied.",
-        "Does not scrape a template, generate a replacement, or claim a completed image."
+        "Searches the stored template library for a suitable familiar format before asking the user for an image.",
+        "Uses a suitable stored template when available; otherwise asks for an attachment without scraping or generating a replacement."
       ]
     }
   ]

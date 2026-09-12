@@ -12,6 +12,11 @@ Parameters:
     MinLength: 1
     MaxLength: 64
     Description: Existing FroggyBot AgentCore Gateway execution role name.
+  GatewayName:
+    Type: String
+    Default: FrogBot-FrogBotTools
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9_-]{0,99}'
+    Description: Deployed FroggyBot AgentCore Gateway name used by its workload identity.
   SchemaBucketName:
     Type: String
     Default: bedrock-agentcore-gateway-frogbot-188757775631-use1
@@ -19,7 +24,7 @@ Parameters:
     Description: Private bucket containing immutable schema release objects.
   Release:
     Type: String
-    Default: skills-v9
+    Default: skills-v22
     AllowedPattern: 'skills-v[1-9][0-9]*'
     Description: FroggyBot Skills release containing the deployed schemas.
   XCredentialProviderName:
@@ -30,6 +35,14 @@ Parameters:
     Type: String
     Default: FrogBotYouTubeApi
     AllowedPattern: '[a-zA-Z0-9\-_]+'
+  XCredentialSecretArn:
+    Type: String
+    AllowedPattern: '^arn:[^:]+:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:bedrock-agentcore-identity![A-Za-z0-9/_+=.@-]+$'
+    Description: Exact managed Secrets Manager ARN returned for FrogBotXApi.
+  YouTubeCredentialSecretArn:
+    Type: String
+    AllowedPattern: '^arn:[^:]+:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:bedrock-agentcore-identity![A-Za-z0-9/_+=.@-]+$'
+    Description: Exact managed Secrets Manager ARN returned for FrogBotYouTubeApi.
 
 Resources:
   GatewaySchemaAccessPolicy:
@@ -44,21 +57,27 @@ Resources:
           - Sid: ReadReviewedSchemas
             Effect: Allow
             Action: s3:GetObject
-            Resource: !Sub 'arn:${AWS::Partition}:s3:::${SchemaBucketName}/releases/${Release}/*'
-          - Sid: UseAgentCoreApiKeys
-            Effect: Allow
-            Action:
-              - bedrock-agentcore:GetApiKeyCredential
-              - bedrock-agentcore:GetResourceApiKey
-              - bedrock-agentcore:GetWorkloadAccessToken
             Resource:
-              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:apikeycredentialprovider/*'
-              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/*'
-              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/*'
-          - Sid: ReadAgentCoreManagedSecrets
+              - !Sub 'arn:${AWS::Partition}:s3:::${SchemaBucketName}/releases/${Release}/x/openapi.yaml'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SchemaBucketName}/releases/${Release}/youtube/openapi.yaml'
+          - Sid: GetGatewayWorkloadToken
+            Effect: Allow
+            Action: bedrock-agentcore:GetWorkloadAccessToken
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default'
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default/workload-identity/${GatewayName}-*'
+          - Sid: UseReviewedApiKeys
+            Effect: Allow
+            Action: bedrock-agentcore:GetResourceApiKey
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/default/apikeycredentialprovider/${XCredentialProviderName}'
+              - !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/default/apikeycredentialprovider/${YouTubeCredentialProviderName}'
+          - Sid: ReadReviewedAgentCoreSecrets
             Effect: Allow
             Action: secretsmanager:GetSecretValue
-            Resource: !Sub 'arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:bedrock-agentcore-identity!*'
+            Resource:
+              - !Ref XCredentialSecretArn
+              - !Ref YouTubeCredentialSecretArn
 
   XResearchTarget:
     Type: AWS::BedrockAgentCore::GatewayTarget
@@ -79,7 +98,7 @@ Resources:
               ProviderArn: !Sub 'arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:token-vault/default/apikeycredentialprovider/${XCredentialProviderName}'
               CredentialLocation: HEADER
               CredentialParameterName: Authorization
-              CredentialPrefix: Bearer
+              CredentialPrefix: 'Bearer '
 
   YouTubeResearchTarget:
     Type: AWS::BedrockAgentCore::GatewayTarget

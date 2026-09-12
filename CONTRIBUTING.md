@@ -9,9 +9,9 @@ FroggyBot Skills accepts small, reviewable additions that help a person or group
 - **Tool or connector:** a public definition for reading from or acting in another service.
 - **Website or documentation:** a focused improvement to `site/`, `README.md`, or `docs/`.
 
-Do not put executable integrations inside a skill. Remote MCP servers stay hosted outside this repository, and credentials belong to the user who connects them.
+Do not put executable integrations inside a skill. Remote integrations stay hosted outside this repository. FroggyBot supplies any credentials required by shared public services, while private account data uses a reviewed provider OAuth flow.
 
-Private additions do not need review. Add a private skill or HTTPS MCP server directly in the FroggyBot app. Submit a pull request only when you want it listed for everyone.
+Private instruction-only skills and custom bot configurations do not need review and can be created directly in the FroggyBot app. Tools and account connections require review before they are offered to users.
 
 ## Add a bot
 
@@ -41,7 +41,7 @@ Add at least three realistic scenarios to `bots/<bot-id>/evals.json`. Each scena
 
 Never put an API token, secret, authorization header value, or credential-bearing URL in a bot, skill, evaluation, or pull request. A bot references a tool by ID only.
 
-When a required MCP server needs a token, the person installing the bot adds the server under **Tools → Add tool**, chooses **Bearer token** or **API key**, and pastes the token into the protected credential field. The app stores it in AWS Secrets Manager and shared bot configurations never include it. The tool proposal must explain where users obtain the token, which header it uses, and the minimum permissions it needs.
+When a required integration needs authentication, the tool proposal must explain whether it uses a FroggyBot-owned service credential or per-user OAuth, which request field carries authorization, and the minimum permissions it needs. Installing a bot must never ask a user to paste a developer API key. FroggyBot-owned values stay in operator secret storage, while per-user OAuth credentials are stored by the app's reviewed connection flow. Shared bot configurations never include either kind of credential.
 
 ## Add a skill
 
@@ -116,14 +116,14 @@ Open a focused pull request, or use the tool request first when you want design 
 - rate limits, cost, and failure behavior; and
 - the smallest permissions that support the outcome.
 
-Community pull requests never add secrets or hosted executable code. Public built-ins maintained by FroggyBot use reviewed OpenAPI schemas under `tools/<provider>/openapi.yaml`. Today, a community MCP server is connected privately by each user through the app. A public connection-recipe format can be added later without moving its server or credentials into this repository.
+Community pull requests never add secrets or hosted executable code. Public built-ins maintained by FroggyBot use reviewed OpenAPI schemas under `tools/<provider>/openapi.yaml`. A remote integration needs a reviewed runtime binding; when it requires authentication, it uses either a FroggyBot-owned service credential or provider OAuth for private account access.
 
 ## Run the checks
 
 ```bash
 python3 scripts/validate_catalog.py
-python3 -m unittest discover -s tests
 python3 scripts/build_site.py
+python3 -m unittest discover -s tests
 ```
 
 Open `dist/index.html` through a local HTTP server when changing the site:
@@ -136,4 +136,4 @@ Then check the homepage, bot-directory search and filters, mobile layout, contri
 
 ## Review checklist
 
-Reviewers check that a public contribution is useful, distinct, concise, safe, least-privilege, and understandable without private context. They also review its trigger examples for overlap with nearby skills and its expectations for outcomes a user can verify. Review determines public discoverability; it does not prevent users from installing the same capability privately.
+Reviewers check that a public contribution is useful, distinct, concise, safe, least-privilege, and understandable without private context. They also review its trigger examples for overlap with nearby skills and its expectations for outcomes a user can verify. Review determines public discoverability; users can still create private instruction-only skills and custom bot configurations in the app.

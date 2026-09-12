@@ -40,6 +40,7 @@ BOT_FIELDS = {
     "toolIds",
 }
 REPOSITORY = "tmoreton/frogbot-skills"
+GATEWAY_TARGETS = ROOT / "infrastructure" / "gateway-targets.yaml"
 
 
 def fail(message: str) -> None:
@@ -84,8 +85,15 @@ def main() -> int:
         fail("catalog schemaVersion must be 3")
     if catalog.get("repository") != REPOSITORY:
         fail(f"catalog repository must be {REPOSITORY}")
-    if not re.fullmatch(r"skills-v[1-9][0-9]*", str(catalog.get("release", ""))):
+    release = str(catalog.get("release", ""))
+    if not re.fullmatch(r"skills-v[1-9][0-9]*", release):
         fail("catalog release must look like skills-v6")
+    gateway_release = re.search(
+        r"(?m)^  Release:\n(?:    .*\n)*?    Default: (\S+)$",
+        GATEWAY_TARGETS.read_text(),
+    )
+    if gateway_release is None or gateway_release.group(1) != release:
+        fail("gateway target release default must match catalog release")
 
     tools = catalog.get("tools")
     skills = catalog.get("skills")

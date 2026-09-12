@@ -37,13 +37,13 @@ docs/                        Catalog decisions and maintainer notes
 
 ```bash
 python3 scripts/validate_catalog.py
-python3 -m unittest discover -s tests
 python3 scripts/build_site.py
+python3 -m unittest discover -s tests
 ```
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for the complete review rules and a copyable catalog example. If you only have an idea, use the [skill request form](https://github.com/tmoreton/frogbot-skills/issues/new?template=skill-request.yml).
 
-You do not need a pull request to make a private skill or connect a private MCP server. Add it directly in the FroggyBot app. Repository review is only required to make something publicly discoverable.
+You do not need a pull request to make a private instruction-only skill. Add it directly in the FroggyBot app. Repository review is required to make a bot, skill, or tool publicly discoverable.
 
 ## Contribute a bot
 
@@ -51,7 +51,7 @@ A public bot is intentionally just configuration: its identity, prompt, existing
 
 Chief is published here like every other bot. FroggyBot setup requires the `chief` template and applies its protected coordinator role after installation; the public configuration itself needs no app-only role or setup fields.
 
-If a private MCP tool needs an API token, add the server in the app under **Skills & tools → Tools → Add tool**, select **Bearer token** or **API key**, and paste the token into the protected credential field. Never add a token to this repository or a bot configuration.
+Installing a public bot never asks the user for a developer API key. FroggyBot supplies credentials for shared public services, while access to private account data uses a provider-specific **Connect account** flow.
 
 ## Skill rules
 
@@ -65,22 +65,39 @@ If a private MCP tool needs an API token, add the server in the app under **Skil
 
 Tools can access services or take actions. A public proposal must describe the exact actions, data involved, authentication, external side effects, and least permissions needed. Contributors may open a focused pull request directly or start with a [tool request](https://github.com/tmoreton/frogbot-skills/issues/new?template=tool-request.yml) when the shape is still uncertain.
 
-A private remote MCP server stays hosted by its provider or contributor, and each user supplies their own credential in the app. Public built-ins maintained by FroggyBot are enabled only after their server-side binding is deployed and tested. Secrets and executable integration code never live in this repository or the app bundle.
+A remote integration stays hosted by its provider or contributor. Shared public services use FroggyBot-owned credentials; private account data requires a reviewed OAuth connection with the least permissions needed. Public built-ins maintained by FroggyBot are enabled only after their server-side binding is deployed and tested. Secrets and executable integration code never live in this repository or the app bundle.
 
 ## What stays in the app backend
 
 This repository owns capability definitions: names, descriptions, skill instructions, tool actions, runtime bindings, and external OpenAPI schemas. The private app repository keeps only the generic machinery needed to use them safely:
 
 - catalog signature, validation, caching, and version pinning;
-- user-created private skills, private MCP connections, and sharing records;
-- per-user credentials encrypted in AWS Secrets Manager and resolved only at invocation time;
+- user-created private skills, OAuth account connections, legacy private-connection records, and sharing records;
+- per-user OAuth credentials encrypted in AWS Secrets Manager and resolved only at invocation time;
 - reviewed runtime implementations such as the calculator and browser session manager;
 - the allowlist that prevents public catalog entries from activating arbitrary bundled code; and
 - AWS credentials, permissions, and deployed gateway resources.
 
-Those pieces cannot be downloaded as community content because they execute with trusted server permissions. The app contains no fallback copy of this public catalog. Write-capable private connections require approval for each direct-chat turn and cannot run in schedules or group rounds.
+Those pieces cannot be downloaded as community content because they execute with trusted server permissions. The app contains no fallback copy of this public catalog. Existing legacy private connections remain viewable, removable, and usable by their current bots, but the app no longer accepts new or edited developer-key connections. Write-capable connections require approval for each direct-chat turn and cannot run in schedules or group rounds.
 
 The X and YouTube targets are the one deployment exception to the main AgentCore project file. AgentCore project schema v1 cannot express an API key's header/query location or prefix, so `infrastructure/gateway-targets.yaml` owns those two targets declaratively next to their canonical schemas. Remove that template when the project schema supports these fields; do not copy the schemas back into the app repository.
+
+Before deploying that template, retrieve each provider's managed secret ARN with
+`aws bedrock-agentcore-control get-api-key-credential-provider --name <provider-name> --query 'apiKeySecretArn.secretArn' --output text`
+and pass the exact values as `XCredentialSecretArn` and `YouTubeCredentialSecretArn`. The template scopes the gateway role to
+those two provider and secret ARNs plus the deployed `FrogBot-FrogBotTools` workload identity; do not replace them with
+account-wide wildcards.
+
+Release these targets before publishing bots that depend on them: tag the reviewed catalog commit with its
+immutable `skills-vN` release, upload only the X and YouTube schemas from that tag to the matching private S3
+release paths, deploy the template with the existing gateway ID and role plus the two exact managed-secret
+ARNs, and wait until both gateway targets report `READY`. Before launch, verify that the production Google Cloud
+project's current YouTube Data API **Search Queries** daily quota can cover the expected traffic from workflows
+that intentionally make several searches; the current `search.list` limit is documented on the
+[official method reference](https://developers.google.com/youtube/v3/docs/search/list). Raise that quota or delay
+publication if it cannot support the launch. Smoke-test the targets' read-only search operations, then
+merge the catalog change that enables the dependent bots. Publishing the catalog first creates a visible bot
+whose required tools cannot run.
 
 ## Publishing model
 
@@ -89,6 +106,6 @@ Every accepted catalog change does two things without a mobile release:
 1. GitHub Pages rebuilds the public bot directory from the new `catalog.json`.
 2. FroggyBot’s AWS backend refreshes the same reviewed catalog and makes available entries selectable or installable in the app.
 
-Bots remain pinned to the skill version they selected. A user can create a private, editable copy or add a private MCP server without changing the public catalog. Sharing a bot or skill never shares its private connections or credentials.
+Bots remain pinned to the skill version they selected. A user can create a private, editable skill copy without changing the public catalog. Sharing a bot or skill never shares connected accounts, legacy private connections, or credentials.
 
 See [docs/CAPABILITY_AUDIT.md](docs/CAPABILITY_AUDIT.md) for the current keep, retire, and next-tool decisions.

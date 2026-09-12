@@ -12,6 +12,7 @@
   "expectations": [
     "The visual brief turns the video's promise into one focal story with explicit hierarchy, contrast, lighting, and a generous crop-safe area.",
     "Comparison variants change the visual story and layout instead of repeating a diagonal split, circular portrait, boxed logo, or generic tech background.",
-    "Finished thumbnails send the complete composition, exact copy, and selected image references to OpenRouter, keep the hook readable at phone size, and claim success only after a 1280x720 PNG is returned."
+    "Thumbnail requests send the complete composition, requested copy, and selected image references to OpenRouter, then visually check the returned 1280x720 PNG for misspellings, missing or extra words, and phone-size readability.",
+    "If requested text is wrong, the workflow makes at most one simplified retry without rewriting user-supplied copy; it labels an unverified or still-flawed result as a draft and states the specific limitation instead of claiming deterministic text or a finished image."
   ]
 }

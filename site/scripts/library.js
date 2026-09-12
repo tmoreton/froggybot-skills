@@ -14,6 +14,8 @@ const examples = {
   'data-analyst': ['Explain the signal in this CSV to a nontechnical team.', 'Key findings, caveats, and a decision-ready chart brief.'],
   'project-organizer': ['Turn these meeting notes into a workable project.', 'Milestones, owners, dependencies, and a prioritized checklist.'],
   'meme-maker': ['Turn this attached image into a launch-day meme.', 'A concise caption and a finished, readable PNG using the supplied template.'],
+  'youtube-studio': ['Find my strongest next video angle and create its thumbnail.', 'A sourced opportunity, title and outline options, plus—after image approval and visual checking—a 1280×720 thumbnail with any text issue clearly reported.'],
+  'trend-scout': ['What is starting to break out in my niche this week?', 'A cross-platform watchlist with evidence, confidence, and concrete tests.'],
 };
 
 const searchable = (bot) => [bot.name, bot.tagline, bot.description, bot.category, bot.author, ...(bot.tags || [])]
