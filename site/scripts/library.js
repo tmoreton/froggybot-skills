@@ -32,6 +32,33 @@ const element = (tag, className, text) => {
   return node;
 };
 
+const accentColor = (value) => /^#[0-9a-f]{6}$/i.test(value || '') ? value : '#007A3D';
+
+function hueShiftFor(bot, bots) {
+  const color = accentColor(bot.color);
+  const value = color.slice(1);
+  const [red, green, blue] = [0, 2, 4].map((offset) => parseInt(value.slice(offset, offset + 2), 16) / 255);
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const delta = max - min;
+  let hue = 0;
+
+  if (delta) {
+    if (max === red) hue = ((green - blue) / delta) % 6;
+    else if (max === green) hue = (blue - red) / delta + 2;
+    else hue = (red - green) / delta + 4;
+    hue = (hue * 60 + 360) % 360;
+  }
+
+  const siblings = bots
+    .filter((candidate) => accentColor(candidate.color).toLowerCase() === color.toLowerCase())
+    .sort((left, right) => left.id.localeCompare(right.id));
+  const position = siblings.findIndex((candidate) => candidate.id === bot.id);
+  const variation = siblings.length > 1 ? (position - (siblings.length - 1) / 2) * 36 : 0;
+
+  return `${Math.round(hue + variation - 150)}deg`;
+}
+
 function visibleBots(catalog) {
   const tools = catalog.tools.filter((tool) => tool.enabled !== false);
   const toolIds = new Set(tools.map((tool) => tool.id));
@@ -53,7 +80,17 @@ function card(bot) {
   const requiredOnSetup = bot.id === 'chief';
   const article = element('article', 'catalog-card');
   const top = element('div', 'card-top');
-  top.append(element('span', 'card-mark', 'B'));
+  const mark = element('span', 'card-mark');
+  mark.setAttribute('aria-hidden', 'true');
+  mark.style.setProperty('--bot-color', accentColor(bot.color));
+  mark.style.setProperty('--bot-hue-shift', hueShiftFor(bot, state.bots));
+  const icon = element('img', 'card-mark-icon');
+  icon.src = '/assets/favicon.png';
+  icon.alt = '';
+  icon.width = 48;
+  icon.height = 48;
+  mark.append(icon);
+  top.append(mark);
   const badges = element('div', 'badges');
   if (bot.featured) addBadge(badges, 'Featured', true);
   addBadge(badges, bot.category || 'General');

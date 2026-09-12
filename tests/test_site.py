@@ -43,6 +43,18 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("data-tool-count", page)
         self.assertIn("Included with setup", script)
 
+    def test_bot_cards_use_the_frog_icon_and_catalog_accents(self) -> None:
+        script = (SITE / "scripts/library.js").read_text()
+        styles = (SITE / "styles/library.css").read_text()
+
+        self.assertIn("icon.src = '/assets/favicon.png'", script)
+        self.assertIn("accentColor(bot.color)", script)
+        self.assertIn("hueShiftFor(bot, state.bots)", script)
+        self.assertIn("candidate.id === bot.id", script)
+        self.assertIn("icon.alt = ''", script)
+        self.assertNotIn("element('span', 'card-mark', 'B')", script)
+        self.assertIn("hue-rotate(var(--bot-hue-shift", styles)
+
     def test_homepage_promotes_bots_instead_of_capability_parts(self) -> None:
         page = (SITE / "index.html").read_text()
         self.assertIn("Browse ready-made bots", page)

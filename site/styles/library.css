@@ -12,7 +12,8 @@
 .catalog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: 16px; }
 .catalog-card { min-height: 450px; padding: 22px; border: 1px solid var(--line); border-radius: 22px; background: var(--white); display: flex; flex-direction: column; }
 .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.card-mark { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 14px; color: #fff; background: var(--green); font-size: 17px; font-weight: 900; }
+.card-mark { width: 48px; height: 48px; flex: 0 0 48px; display: block; overflow: hidden; border-radius: 15px; background: #f7f4ee; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bot-color, var(--green)) 24%, transparent); }
+.card-mark-icon { width: 100%; height: 100%; display: block; object-fit: cover; filter: hue-rotate(var(--bot-hue-shift, 0deg)); }
 .badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
 .badge { padding: 5px 9px; border-radius: 10px; color: #666159; background: #f0eee8; font-size: 10px; font-weight: 750; }
 .badge.featured { color: #075a31; background: var(--green-soft); }
