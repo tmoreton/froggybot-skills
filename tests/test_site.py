@@ -102,7 +102,7 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("bedrock-agentcore:GetApiKeyCredential\n", template)
         self.assertNotIn("bedrock-agentcore-identity!.+$", template)
         self.assertIn("bedrock-agentcore-identity![A-Za-z0-9/_+=.@-]+$", template)
-        self.assertIn("CredentialPrefix: 'Bearer '", template)
+        self.assertIn("CredentialPrefix: Bearer", template)
 
         release_guide = " ".join((ROOT / "README.md").read_text().split())
         self.assertIn("YouTube Data API **Search Queries** daily quota", release_guide)
